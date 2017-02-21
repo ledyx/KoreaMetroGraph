@@ -2,13 +2,15 @@ package io.github.xeyez.stationgraph;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 import io.github.xeyez.stationgraph.StationGraphVO.Identifier;
 
@@ -313,6 +315,48 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 	public LinkedList<StationGraphVO> travelBFS(boolean isAscending) {
 		return travelBFS(edgesByVertices.firstEntry().getKey(), isAscending);
 	}
+	
+	/**
+	 * Wrapping.
+	 * @param stationName
+	 * @return
+	 */
+	public List<StationGraphVO> get(String stationName, String lineNum) {
+        try {
+            return getEdges(stationName).stream().filter(edge -> edge.getToVertex().getLineNum().equals(lineNum)).map(Edge::getToVertex).collect(Collectors.toList());
+            
+            // 속도에 민감하다면 그냥 for 사용.
+            /*ArrayList<StationGraphVO> list = new ArrayList<>();
+            for(AbstractGraph<StationGraphVO>.Edge edge : getEdges(stationName)) {
+                StationGraphVO toVertex = edge.getToVertex();
+
+                if(toVertex.getLineNum().equals(lineNum)) {
+                    list.add(toVertex);
+                }
+            }
+
+            return list;*/
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+
+        return null;
+    }
+
+	/**
+	 * Wrapping.
+	 * @param stationName
+	 * @return
+	 */
+    public List<StationGraphVO> get(String stationName) {
+        try {
+            return getEdges(stationName).stream().map(obj -> obj.getToVertex()).collect(Collectors.toList());
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+
+        return null;
+    }
 	
 	@SuppressWarnings("unchecked")
 	private <T> T deepCopy(T obj) {
