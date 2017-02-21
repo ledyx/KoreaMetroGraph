@@ -42,3 +42,7 @@ StationGraphVO(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=tru
  - U : 의정부경전철
 - identifier : 이전역, 현재역, 다음역 구분
 - isMainLine : 이전/다음역이 여러개인 경우 주노선의 역인 지 구분
+
+
+## Model 데이터 수정시 주의사항
+이전/다음역 기준은 "상행/외선/노선도 기준 오른쪽방향"을 바탕으로 작성됐습니다. 그렇기때문에 역 추가시 인접 역명을 꼭 확인해야 합니다. 그리고 필드명은 절대 수정하면 안됩니다. 내부적으로 Reflection을 사용하여 필드명인 line'X'에서 'X'를 lineNum 구분자로 사용중입니다. 그리고 'X'의 기준은 서울시 열린 데이터 광장에서 제공하는 모든 지하철 관련 API의 공통 제공 필드를 기준으로 작성됐습니다.
