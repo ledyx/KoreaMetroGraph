@@ -2,8 +2,8 @@
 수도권 지하철 이전/다음역 및 노선번호 정보를 그래프를 이용하여 구현. (JDK 1.8+ 이상 필요!)
 
 ## 개발 환경
-JDK 1.8+ (코드량 줄이기 위해서 stream API 사용. 안드로이드에서 적용하시려면 Lightweight-Stream-API(https://github.com/aNNiMON/Lightweight-Stream-API)로 변환해서 .)
-Lombok (Lombok 안쓰시면 그냥 getter/setter 만드세요.)
+- JDK 1.8+ (코드량 줄이기 위해서 stream API 사용. 안드로이드에서 적용하시려면 Lightweight-Stream-API(https://github.com/aNNiMON/Lightweight-Stream-API)로 변환하세요.)
+- Lombok (Lombok 안쓰시면 그냥 getter/setter 만드세요.)
 
 ## 왜 만들었고, 왜 공개하는가?
 **지하철 타이머**에서 사용하기 위해 작성. 딱히 역들의 연결정보(이전/다음역)에  공개된 소스도 없고, 내 애플리케이션에 적용하려는 최적의 구조를 갖춘 소스가 필요했기에 직접 삽질.
