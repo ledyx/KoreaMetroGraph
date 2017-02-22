@@ -2,7 +2,7 @@
 수도권 지하철 이전/다음역 및 노선번호 정보를 그래프를 이용하여 구현. (JDK 1.8+ 이상 필요!)
 
 ## 개발 환경
-- JDK 1.8+ (코드량 줄이기 위해서 stream API 사용. 안드로이드에서 적용하시려면 Lightweight-Stream-API(https://github.com/aNNiMON/Lightweight-Stream-API)로 변환하세요.)
+- JDK 1.8+ (코드량 줄이기 위해서 stream API 사용. 안드로이드에 적용하시려면 Lightweight-Stream-API(https://github.com/aNNiMON/Lightweight-Stream-API)로 변환하세요.)
 - Lombok (Lombok 안쓰시면 그냥 getter/setter 만드세요.)
 
 ## 왜 만들었고, 왜 공개하는가?
