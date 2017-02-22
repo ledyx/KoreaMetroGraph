@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.TreeMap;
 
-public class AbstractGraph<T> implements Serializable {
+public abstract class AbstractGraph<T> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
