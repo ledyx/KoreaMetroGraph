@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -350,7 +349,7 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 	 */
     public List<StationGraphVO> get(String stationName) {
         try {
-            return getEdges(stationName).stream().map(obj -> obj.getToVertex()).collect(Collectors.toList());
+            return getEdges(stationName).stream().map(Edge::getToVertex).collect(Collectors.toList());
         } catch (Exception e) {
         	e.printStackTrace();
         }
