@@ -15,6 +15,8 @@ import io.github.xeyez.stationgraph.StationGraphVO.Identifier;
 
 public class StationGraph extends AbstractGraph<StationGraphVO> {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private static StationGraph instance = null;
 	
 	public static StationGraph getInstance() {

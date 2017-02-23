@@ -7,10 +7,15 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.TreeMap;
 
+import lombok.Getter;
+import lombok.ToString;
+
 public abstract class AbstractGraph<T> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Getter
+	@ToString
 	public class Edge implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
@@ -20,19 +25,6 @@ public abstract class AbstractGraph<T> implements Serializable {
 		public Edge(T fromVertex, T toVertex) {
 			this.fromVertex = fromVertex;
 			this.toVertex = toVertex;
-		}
-
-		public T getFromVertex() {
-			return fromVertex;
-		}
-		
-		public T getToVertex() {
-			return toVertex;
-		}
-
-		@Override
-		public String toString() {
-			return "Edge [fromVertex=" + fromVertex + ", toVertex=" + toVertex + "]";
 		}
 		
 		@Override
