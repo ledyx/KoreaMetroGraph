@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,8 +15,6 @@ import java.util.stream.Collectors;
 import io.github.xeyez.stationgraph.StationGraphVO.Identifier;
 
 public class StationGraph extends AbstractGraph<StationGraphVO> {
-	
-	private static final long serialVersionUID = 1L;
 	
 	private static StationGraph instance = null;
 	
@@ -41,20 +40,24 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 			StationGraph stationGraph = new StationGraph();
 			
 			for(Field field : Model.class.getDeclaredFields()) {
-				String lineNum = field.getName().replace("line", "");
-				String[] stationNames = ((String) field.get("java.lang.String")).split(" ");
-				
-				for (int i = 0; i < stationNames.length - 1; i++) {
-					String stationName1 = stationNames[i];
-					String stationName2 = stationNames[i + 1];
+				try {
+					String lineNum = field.getName().replace("line", "");
+					String[] stationNames = ((String) field.get("java.lang.String")).split(" ");
+					
+					for (int i = 0; i < stationNames.length - 1; i++) {
+						String stationName1 = stationNames[i];
+						String stationName2 = stationNames[i + 1];
 
-					StationGraphVO vo1 = new StationGraphVO(stationName1, lineNum, Identifier.CURRENT);
-					stationGraph.addVertex(vo1);
+						StationGraphVO vo1 = new StationGraphVO(stationName1, lineNum, Identifier.CURRENT);
+						stationGraph.addVertex(vo1);
 
-					StationGraphVO vo2 = new StationGraphVO(stationName2, lineNum, Identifier.CURRENT);
-					stationGraph.addVertex(vo2);
+						StationGraphVO vo2 = new StationGraphVO(stationName2, lineNum, Identifier.CURRENT);
+						stationGraph.addVertex(vo2);
 
-					stationGraph.addEdge(vo1, vo2);
+						stationGraph.addEdge(vo1, vo2);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 			
@@ -324,10 +327,10 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 	 */
 	public List<StationGraphVO> get(String stationName, String lineNum) {
         try {
-            return getEdges(stationName).stream().filter(edge -> edge.getToVertex().getLineNum().equals(lineNum)).map(Edge::getToVertex).collect(Collectors.toList());
+            //return getEdges(stationName).stream().filter(edge -> edge.getToVertex().getLineNum().equals(lineNum)).map(Edge::getToVertex).collect(Collectors.toList());
             
             // 속도에 민감하다면 그냥 for 사용.
-            /*ArrayList<StationGraphVO> list = new ArrayList<>();
+            ArrayList<StationGraphVO> list = new ArrayList<>();
             for(AbstractGraph<StationGraphVO>.Edge edge : getEdges(stationName)) {
                 StationGraphVO toVertex = edge.getToVertex();
 
@@ -336,7 +339,7 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
                 }
             }
 
-            return list;*/
+            return list;
         } catch (Exception e) {
         	e.printStackTrace();
         }
@@ -351,7 +354,15 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 	 */
     public List<StationGraphVO> get(String stationName) {
         try {
-            return getEdges(stationName).stream().map(Edge::getToVertex).collect(Collectors.toList());
+        	List<StationGraphVO> list = new ArrayList<>();
+        	
+        	for(Edge e : getEdges(stationName)) {
+        		list.add(e.getToVertex());
+            }
+        	
+        	return list;
+        	
+            //return getEdges(stationName).stream().map(Edge::getToVertex).collect(Collectors.toList());
         } catch (Exception e) {
         	e.printStackTrace();
         }
