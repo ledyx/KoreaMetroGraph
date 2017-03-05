@@ -77,8 +77,7 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 		/* 1호선 */
 		// 구로 & 인천
 		setSubLine(graph, "구로", "가산디지털단지", "1");
-		graph.removeEdge("구로", "인천", "1");
-		graph.removeEdge("인천", "구로", "1");
+		graph.removeEdgeSymmetry("구로", "인천", "1");
 
 		// 금천구청 & 광명
 		setSubLine(graph, "금천구청", "광명", "1");
@@ -92,19 +91,16 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 		/* 2호선 */
 		// 신도림 & 신설동
 		setSubLine(graph, "신도림", "도림천", "2");
-		graph.removeEdge("신도림", "신설동", "2");
-		graph.removeEdge("신설동", "신도림", "2");
+		graph.removeEdgeSymmetry("신도림", "신설동", "2");
 
 		// 성수
 		setSubLine(graph, "성수", "용답", "2");
-		graph.removeEdge("성수", "시청", "2");
-		graph.removeEdge("시청", "성수", "2");
+		graph.removeEdgeSymmetry("성수", "시청", "2");
 
 		/* 5호선 */
 		// 강동 상일동
 		setSubLine(graph, "강동", "둔촌동", "5");
-		graph.removeEdge("강동", "상일동", "5");
-		graph.removeEdge("상일동", "강동", "5");
+		graph.removeEdgeSymmetry("강동", "상일동", "5");
 
 		/* 6호선 */
 		graph.addEdge(new StationGraphVO("구산", "6", Identifier.CURRENT), new StationGraphVO("응암", "6", Identifier.NEXT)); // 환형
@@ -162,6 +158,11 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 			throw new NullPointerException("Not found");
 		
 		edges.remove(result);
+	}
+	
+	private void removeEdgeSymmetry(String fromStationName, String toStationName, String lineNum) {
+		removeEdge(fromStationName, toStationName, lineNum);
+		removeEdge(toStationName, fromStationName, lineNum);
 	}
 	
 	@Override
