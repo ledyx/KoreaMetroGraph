@@ -32,7 +32,7 @@ StationGraphVO(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=tru
 
 - stationName : 역 이름
 - lineNum : 노선 이름
- - 1~9 : 1~9호선
+ - 1 ~ 9 : 1 ~ 9호선
  - A : 공항철도
  - B : 분당선
  - E : 에버라인 (용인경전철)
