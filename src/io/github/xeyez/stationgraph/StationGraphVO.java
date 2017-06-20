@@ -1,9 +1,6 @@
 package io.github.xeyez.stationgraph;
 import java.io.Serializable;
 
-import lombok.Data;
-
-@Data
 public class StationGraphVO implements Comparable<StationGraphVO>, Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -23,6 +20,44 @@ public class StationGraphVO implements Comparable<StationGraphVO>, Serializable 
 		this.lineNum = lineNum;
 		this.identifier = identifier;
 	}
+
+	
+	public String getStationName() {
+		return stationName;
+	}
+	public void setStationName(String stationName) {
+		this.stationName = stationName;
+	}
+
+	public String getLineNum() {
+		return lineNum;
+	}
+	public void setLineNum(String lineNum) {
+		this.lineNum = lineNum;
+	}
+
+	public Identifier getIdentifier() {
+		return identifier;
+	}
+	public void setIdentifier(Identifier identifier) {
+		this.identifier = identifier;
+	}
+
+	public boolean isMainLine() {
+		return isMainLine;
+	}
+
+	public void setMainLine(boolean isMainLine) {
+		this.isMainLine = isMainLine;
+	}
+
+	
+	@Override
+	public String toString() {
+		return "StationGraphVO [stationName=" + stationName + ", lineNum=" + lineNum + ", identifier=" + identifier
+				+ ", isMainLine=" + isMainLine + "]";
+	}
+
 
 	@Override
 	public int compareTo(StationGraphVO o) {
