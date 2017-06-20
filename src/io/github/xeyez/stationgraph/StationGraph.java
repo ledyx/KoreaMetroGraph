@@ -240,17 +240,12 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 		if(!checkLineNum(vertex.getLineNum()))
 			throw new IllegalArgumentException("Unavailable lineNum");
 		
-		//String lineNum = vertex.getLineNum();
-		
 		LinkedList<StationGraphVO> results = new LinkedList<>();
 		
 		HashSet<StationGraphVO> checkVisitSet = new HashSet<>();
-		//HashSet<String> checkVisitSet = new HashSet<>();
-		
 		LinkedList<StationGraphVO> stack = new LinkedList<>();
 
 		//첫 번째 Node 방문
-		//StationVO firstVertex = getVertex(vertex);
 		StationGraphVO firstVertex = vertex;
 		stack.push(firstVertex);
 		checkVisitSet.add(firstVertex);
@@ -276,11 +271,17 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 		return results;
 	}
 	
+	/**
+	 * Depth First Search
+	 */
 	@Override
 	public LinkedList<StationGraphVO> travelDFS(boolean isAscending) {
 		return travelDFS(edgesByVertices.firstEntry().getKey(), isAscending);
 	}
 	
+	/**
+	 * Benedth First Search
+	 */
 	@Override
 	public LinkedList<StationGraphVO> travelBFS(StationGraphVO vertex, boolean isAscending) {
 		LinkedList<StationGraphVO> results = new LinkedList<>();
@@ -315,13 +316,16 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 		return results;
 	}
 	
+	/**
+	 * Benedth First Search
+	 */
 	@Override
 	public LinkedList<StationGraphVO> travelBFS(boolean isAscending) {
 		return travelBFS(edgesByVertices.firstEntry().getKey(), isAscending);
 	}
 	
 	/**
-	 * Wrapping.
+	 * Wrapping. 편하게 쓰기 위한 Helper Method.
 	 * @param stationName
 	 * @return
 	 */
@@ -348,7 +352,7 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
     }
 
 	/**
-	 * Wrapping.
+	 * Wrapping. 편하게 쓰기 위한 Helper Method.
 	 * @param stationName
 	 * @return
 	 */

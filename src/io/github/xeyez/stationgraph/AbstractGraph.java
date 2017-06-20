@@ -54,6 +54,9 @@ public abstract class AbstractGraph<T> implements Serializable {
 	
 	protected GraphType graphType;
 	
+	/**
+	 * 실질적인 Graph 구현체
+	 */
 	protected TreeMap<T, LinkedList<Edge>> edgesByVertices = new TreeMap<>();
 	
 	public AbstractGraph() {
