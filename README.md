@@ -32,18 +32,18 @@ StationGraphVO(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=tru
 
 - stationName : 역 이름
 - lineNum : 노선 이름
- - 1 ~ 9 : 1 ~ 9호선
- - A : 공항철도
- - B : 분당선
- - E : 에버라인 (용인경전철)
- - G : 경춘선
- - I : 인천1호선
- - I2 : 인천2호선
- - K : 경의중앙선
- - KK : 경강선
- - S : 신분당선
- - SU : 수인선
- - U : 의정부경전철
+  - 1 ~ 9 : 1 ~ 9호선
+  - A : 공항철도
+  - B : 분당선
+  - E : 에버라인 (용인경전철)
+  - G : 경춘선
+  - I : 인천1호선
+  - I2 : 인천2호선
+  - K : 경의중앙선
+  - KK : 경강선
+  - S : 신분당선
+  - SU : 수인선
+  - U : 의정부경전철
 - identifier : 이전역, 현재역, 다음역 구분
 - isMainLine : 이전/다음역이 여러개인 경우 주노선의 역인 지 구분
 
