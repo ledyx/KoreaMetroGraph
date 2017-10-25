@@ -5,10 +5,6 @@ public class StationGraphVO implements Comparable<StationGraphVO>, Serializable 
 	
 	private static final long serialVersionUID = 1L;
 
-	public enum Identifier {
-		PREVIOUS, CURRENT, NEXT
-	}
-	
 	private String stationName;
 	private String lineNum;
 	private Identifier identifier;

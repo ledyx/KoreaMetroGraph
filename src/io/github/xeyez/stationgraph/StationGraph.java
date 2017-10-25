@@ -11,8 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import io.github.xeyez.stationgraph.StationGraphVO.Identifier;
-
 public class StationGraph extends AbstractGraph<StationGraphVO> {
 	
 	private static StationGraph instance = null;
@@ -329,7 +327,7 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 	 * @param stationName
 	 * @return
 	 */
-	public List<StationGraphVO> get(String stationName, String lineNum) {
+	public List<StationGraphVO> find(String stationName, String lineNum) {
         try {
             //return getEdges(stationName).stream().filter(edge -> edge.getToVertex().getLineNum().equals(lineNum)).map(Edge::getToVertex).collect(Collectors.toList());
             
@@ -356,7 +354,7 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 	 * @param stationName
 	 * @return
 	 */
-    public List<StationGraphVO> get(String stationName) {
+    public List<StationGraphVO> find(String stationName) {
         try {
         	List<StationGraphVO> list = new ArrayList<>();
         	
