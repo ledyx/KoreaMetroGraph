@@ -14,9 +14,9 @@
 
 ## 간단한 사용 방법
 ```java
-StationGraph.getInstance().get("신도림").forEach(System.out::println);
+StationGraph.getInstance().find("신도림").forEach(System.out::println);
 System.out.println();
-StationGraph.getInstance().get("신도림", "1").forEach(System.out::println);
+StationGraph.getInstance().find("신도림", "1").forEach(System.out::println);
 ```
 
 ### 결과
