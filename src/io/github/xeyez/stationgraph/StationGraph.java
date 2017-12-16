@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.TreeMap;
 
 public class StationGraph extends AbstractGraph<StationGraphVO> {
 	
@@ -36,7 +37,7 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 		try {
 			StationGraph stationGraph = new StationGraph();
 			
-			for(Field field : Model.class.getDeclaredFields()) {
+			/*for(Field field : Model.class.getDeclaredFields()) {
 				try {
 					String lineNum = field.getName().replace("line", "");
 					String[] stationNames = ((String) field.get("java.lang.String")).split(" ");
@@ -55,6 +56,24 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
+				}
+			}*/
+
+			TreeMap<String, ArrayList<String>> raw = new Model2().build();
+			for(String lineNum : raw.keySet()) {
+				
+				ArrayList<String> stationNames = raw.get(lineNum);
+				for(int i=0 ; i<stationNames.size() - 1 ; i++) {
+					String stationName1 = stationNames.get(i);
+					String stationName2 = stationNames.get(i + 1);
+					
+					StationGraphVO vo1 = new StationGraphVO(stationName1, lineNum, Identifier.CURRENT);
+					stationGraph.addVertex(vo1);
+
+					StationGraphVO vo2 = new StationGraphVO(stationName2, lineNum, Identifier.CURRENT);
+					stationGraph.addVertex(vo2);
+					
+					stationGraph.addEdge(vo1, vo2);
 				}
 			}
 			
