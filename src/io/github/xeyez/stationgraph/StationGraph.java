@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -36,30 +35,8 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 		
 		try {
 			StationGraph stationGraph = new StationGraph();
-			
-			/*for(Field field : Model.class.getDeclaredFields()) {
-				try {
-					String lineNum = field.getName().replace("line", "");
-					String[] stationNames = ((String) field.get("java.lang.String")).split(" ");
-					
-					for (int i = 0; i < stationNames.length - 1; i++) {
-						String stationName1 = stationNames[i];
-						String stationName2 = stationNames[i + 1];
 
-						StationGraphVO vo1 = new StationGraphVO(stationName1, lineNum, Identifier.CURRENT);
-						stationGraph.addVertex(vo1);
-
-						StationGraphVO vo2 = new StationGraphVO(stationName2, lineNum, Identifier.CURRENT);
-						stationGraph.addVertex(vo2);
-
-						stationGraph.addEdge(vo1, vo2);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}*/
-
-			TreeMap<String, ArrayList<String>> raw = new Model2().build();
+			TreeMap<String, ArrayList<String>> raw = Model.build();
 			for(String lineNum : raw.keySet()) {
 				
 				ArrayList<String> stationNames = raw.get(lineNum);
