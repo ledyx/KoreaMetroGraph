@@ -1,13 +1,18 @@
 # StationGraph
 수도권 지하철 이전/다음역 및 노선번호 정보를 그래프를 이용하여 구현.
 
+
 ## 개발 환경
 - JDK 1.8+ (코드량 줄이기 위해서 stream API 사용. 안드로이드에 적용하시려면 Lightweight-Stream-API(https://github.com/aNNiMON/Lightweight-Stream-API) 로 변환하세요.)
 
+
 ## 이런걸 왜 만들었고, 왜 공개하나요?
-우선적으로 2015년부터 만들어오고 있는 [**지하철 타이머**](https://play.google.com/store/apps/details?id=com.pongdang.jita)라는 어플리케이션에 적용하기 위해 작성되었습니다.
-보통 지하철 어플리케이션은 많이 만들어보는 앱입니다. 그 중 가장 중요한 정보가 **"이전/다음역"에 대한 연결정보**인 데 딱히 공개된 소스가 없었기에 직접 위키피디아를 크롤링해서 그래프 자료구조로 구현했습니다.
-그리고 저 또한 오픈소스의 도움을 많이 받아 보다 빠르게 개발 속도를 낼 수 있었기에 저와 같은 작업(삽질)을 하는 누군가도 도움을 받을 수 있으면 하는 바램에 공개합니다.
+2015년부터 만들고 있는 지하철 안드로이드 애플리케이션인 [**지하철 타이머**](https://play.google.com/store/apps/details?id=com.pongdang.jita)에 적용하기 위해 작성되었습니다.
+
+보통 모바일 앱 제작에서 지하철은 흔한 접하는 주제입니다. 그 중 가장 중요한 정보가 **"이전/다음역"에 대한 연결정보**인 데 딱히 공개된 소스가 없었기에 직접 위키피디아를 크롤링해서 그래프 자료구조로 구현했습니다. ~~(없으면 만드는 개발자 본능!)~~
+
+그리고 저와 같은 작업(=삽질)을 하는 누군가 수고를 덜었으면 하는 바램에 공개합니다.
+
 
 ## 간단한 사용 방법
 ```java
@@ -15,6 +20,7 @@ StationGraph.getInstance().find("신도림").forEach(System.out::println);
 System.out.println();
 StationGraph.getInstance().find("신도림", "1").forEach(System.out::println);
 ```
+
 
 ### 결과
 ```java
