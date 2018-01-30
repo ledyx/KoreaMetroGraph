@@ -17,7 +17,7 @@ StationGraph.getInstance().find("신도림", "1").forEach(System.out::println);
 ```
 
 ### 결과
-```
+```java
 StationGraphVO(stationName=구로, lineNum=1, identifier=PREVIOUS, isMainLine=true)
 StationGraphVO(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=true)
 StationGraphVO(stationName=도림천, lineNum=2, identifier=PREVIOUS, isMainLine=false)
@@ -42,6 +42,7 @@ StationGraphVO(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=tru
   - S : 신분당선
   - SU : 수인선
   - U : 의정부경전철
+  - UI : 우이신설경전철
 - identifier : 이전역, 현재역, 다음역 구분 (PREVIOUS, CURRENT, NEXT)
 - isMainLine : 이전/다음역이 여러개인 경우 주노선의 역인 지 구분 (boolean)
 

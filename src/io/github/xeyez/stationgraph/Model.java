@@ -58,10 +58,13 @@ public class Model {
 	private String lineI2 = "검단오류 왕길 검단사거리 마전 완정 독정 검암 검바위 아시아드경기장 서구청 가정 가정중앙시장 석남 서부여성회관 인천가좌 가재울 주안국가산단 주안 시민공원 석바위시장 인천시청 석천사거리 모래내시장 만수 남동구청 인천대공원 운연";
 
 	// 의정부
-	private String lineUI = "발곡 회룡 범골 경전철의정부 의정부시청 흥선 의정부중앙 동오 새말 경기도청북부청사 효자 곤제 어룡 송산 탑석";
+	private String lineU = "발곡 회룡 범골 경전철의정부 의정부시청 흥선 의정부중앙 동오 새말 경기도청북부청사 효자 곤제 어룡 송산 탑석";
 
 	// 에버라인 (용인경전철)
 	private String lineE = "기흥 강남대 지석 어정 동백 초당 삼가 시청·용인대 명지대 김량장 운동장·송담대 고진 보평 둔전 전대·에버랜드";
+	
+	// 우이신설경전철
+	private String lineUI = "북한산우이 솔밭공원 4·19민주묘지 가오리 화계 삼양 삼양사거리 솔샘 북한산보국문 정릉 성신여대입구 보문 신설동";
 
 	// 자기부상
 	private String lineJ = "인천국제공항 장기주차장 합동청사 국제업무단지 워터파크 용유";
@@ -89,9 +92,10 @@ public class Model {
 		assemble("S", lineS);
 		assemble("I", lineI);
 		assemble("I2", lineI2);
-		assemble("UI", lineUI);
+		assemble("U", lineU);
 		assemble("E", lineE);
-		assemble("J", lineJ);
+		assemble("UI", lineUI);
+		//assemble("J", lineJ);
 	}
 	
 	private void assemble(String key, String values) {
