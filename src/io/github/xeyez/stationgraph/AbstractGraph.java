@@ -1,6 +1,8 @@
 package io.github.xeyez.stationgraph;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -80,11 +82,13 @@ public abstract class AbstractGraph<T> implements Serializable {
 	}
 	
 	protected void sort(LinkedList<Edge> edges, boolean isAscending) {
-		
-		if(isAscending)
-			edges.sort((a, b) -> compare(a.getToVertex(), b.getToVertex()));
-		else
-			edges.sort((a, b) -> compare(b.getToVertex(), a.getToVertex()));
+		Collections.sort(edges, new Comparator<Edge>() {
+
+			@Override
+			public int compare(Edge o1, Edge o2) {
+				return isAscending? compareVertice(o1.getToVertex(), o2.getToVertex()) : compareVertice(o2.getToVertex(), o1.getToVertex());
+			}
+		});
 	}
 	
 	public TreeMap<T, LinkedList<Edge>> getEdgesByVertices() {
@@ -146,95 +150,8 @@ public abstract class AbstractGraph<T> implements Serializable {
 		}
 	}
 	
-	public void removeEdge(T fromVertex, T toVertex) {
-		LinkedList<Edge> edges = edgesByVertices.get(fromVertex);
-		
-		if(!edges.stream().anyMatch(x -> x.getToVertex().equals(toVertex)))
-			throw new NullPointerException();
-		
-		edges.removeIf(x -> x.getToVertex().equals(toVertex));
-		
-		if(graphType == GraphType.UNDIRECTED) {
-			LinkedList<Edge> edges2 = edgesByVertices.get(toVertex);
-			edges2.removeIf(x -> x.getFromVertex().equals(fromVertex));
-		}
-	}
-	
 	public void clear() {
 		edgesByVertices.clear();
-	}
-	
-	public LinkedList<T> travelDFS(boolean isAscending) {
-		return travelDFS(edgesByVertices.firstEntry().getKey(), isAscending);
-	}
-	
-	public LinkedList<T> travelDFS(T vertex, boolean isAscending) {
-		LinkedList<T> results = new LinkedList<>();
-		
-		HashSet<T> checkVisitSet = new HashSet<>();
-		
-		LinkedList<T> stack = new LinkedList<>();
-
-		//첫 번째 Node 방문
-		T firstVertex = getVertex(vertex);
-		stack.push(firstVertex);
-		checkVisitSet.add(firstVertex);
-		
-		while(!stack.isEmpty()) {
-			T poppedVertex = stack.pop();
-			results.add(poppedVertex);
-			
-			sort(edgesByVertices.get(poppedVertex), !isAscending);
-			
-			for(Edge edge : edgesByVertices.get(poppedVertex)) {
-
-				T linkedVertex = edge.getToVertex();
-				
-				if(!checkVisitSet.contains(linkedVertex)) {
-					checkVisitSet.add(linkedVertex);
-					stack.push(linkedVertex);
-				}
-			}
-		}
-		
-		return results;
-	}
-	
-	public LinkedList<T> travelBFS(boolean isAscending) {
-		return travelBFS(edgesByVertices.firstEntry().getKey(), isAscending);
-	}
-	
-	public LinkedList<T> travelBFS(T vertex, boolean isAscending) {
-		LinkedList<T> results = new LinkedList<>();
-		
-		HashSet<T> checkVisitSet = new HashSet<>();
-		
-		Queue<T> queue = new LinkedList<>();
-		
-		//첫 번째 Node 방문
-		T firstVertex = getVertex(vertex);
-		queue.offer(firstVertex);
-		checkVisitSet.add(firstVertex);
-		
-		while(!queue.isEmpty()) {
-			T dequeuedVertex = queue.poll();
-			results.add(dequeuedVertex);
-			
-			sort(edgesByVertices.get(dequeuedVertex), isAscending);
-			
-			for(Edge edge : edgesByVertices.get(dequeuedVertex)) {
-				
-				T linkedVertex = edge.getToVertex();
-				
-				if(!checkVisitSet.contains(linkedVertex)) {
-					checkVisitSet.add(linkedVertex);
-					
-					queue.offer(linkedVertex);
-				}
-			}
-		}
-		
-		return results;
 	}
 	
 	public TreeMap<T, LinkedList<Edge>> getRemovedSymmetryGraph() {
@@ -287,7 +204,7 @@ public abstract class AbstractGraph<T> implements Serializable {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public int compare(T x, T y) {
+	public int compareVertice(T x, T y) {
 		if(x == null || y == null)
 			throw new IllegalArgumentException("Null is not available.");
 		else if(!x.getClass().getTypeName().equals(y.getClass().getTypeName()))

@@ -229,7 +229,6 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 		return super.getEdges(new StationGraphVO(stationName, "", Identifier.CURRENT));
 	}
 	
-	@Override
 	public LinkedList<StationGraphVO> travelDFS(StationGraphVO vertex, boolean isAscending) {
 		if(!checkLineNum(vertex.getLineNum()))
 			throw new IllegalArgumentException("Unavailable lineNum");
@@ -268,7 +267,6 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 	/**
 	 * Depth First Search
 	 */
-	@Override
 	public LinkedList<StationGraphVO> travelDFS(boolean isAscending) {
 		return travelDFS(edgesByVertices.firstEntry().getKey(), isAscending);
 	}
@@ -276,7 +274,6 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 	/**
 	 * Benedth First Search
 	 */
-	@Override
 	public LinkedList<StationGraphVO> travelBFS(StationGraphVO vertex, boolean isAscending) {
 		LinkedList<StationGraphVO> results = new LinkedList<>();
 		
@@ -313,7 +310,6 @@ public class StationGraph extends AbstractGraph<StationGraphVO> {
 	/**
 	 * Benedth First Search
 	 */
-	@Override
 	public LinkedList<StationGraphVO> travelBFS(boolean isAscending) {
 		return travelBFS(edgesByVertices.firstEntry().getKey(), isAscending);
 	}
