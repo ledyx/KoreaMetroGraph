@@ -3,7 +3,8 @@
 
 
 ## 개발 환경
-- JDK 1.8+ (코드량 줄이기 위해서 stream API 사용. 안드로이드에 적용하시려면 Lightweight-Stream-API(https://github.com/aNNiMON/Lightweight-Stream-API) 로 변환하세요.)
+- JDK 1.8+
+  - travelBFS, travelDFS Method에서 결과값을 정렬할 때, comparator 구현에서 Lambda가 사용되었습니다. 만약 [AbstractGraph.java](https://github.com/xeyez/StationGraph/blob/master/src/io/github/xeyez/stationgraph/AbstractGraph.java)의 "sort" Method를 삭제하시거나 comparator 구현을 instance로 생성하셔서 구현한다면 1.5까지 작동할 수 있습니다.
 
 
 ## 이런걸 왜 만들었고, 왜 공개하나요?
