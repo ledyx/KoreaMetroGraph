@@ -3,7 +3,7 @@
 
 
 ## 개발 환경
-- JDK 1.8+
+- JDK 1.5+
 
 ## 이런걸 왜 만들었고, 왜 공개하나요?
 2015년부터 만들고 있는 지하철 안드로이드 애플리케이션인 [**지하철 타이머**](https://play.google.com/store/apps/details?id=com.pongdang.jita)에 적용하기 위해 작성되었습니다.
