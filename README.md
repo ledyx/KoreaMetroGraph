@@ -3,9 +3,7 @@
 
 
 ## 개발 환경
-- JDK 1.8+
-  - travelBFS, travelDFS Method에서 결과값을 정렬할 때, comparator 구현에서 Lambda가 사용되었습니다. 만약 [AbstractGraph.java](https://github.com/xeyez/StationGraph/blob/master/src/io/github/xeyez/stationgraph/AbstractGraph.java)의 "sort" Method를 삭제하시거나 comparator 구현을 instance로 생성하셔서 구현한다면 1.5까지 작동할 수 있습니다.
-
+- JDK 1.5+
 
 ## 이런걸 왜 만들었고, 왜 공개하나요?
 2015년부터 만들고 있는 지하철 안드로이드 애플리케이션인 [**지하철 타이머**](https://play.google.com/store/apps/details?id=com.pongdang.jita)에 적용하기 위해 작성되었습니다.
