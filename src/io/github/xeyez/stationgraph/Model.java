@@ -95,7 +95,7 @@ public class Model {
 		assemble("U", lineU);
 		assemble("E", lineE);
 		assemble("UI", lineUI);
-		//assemble("J", lineJ);
+		assemble("J", lineJ);
 	}
 	
 	private void assemble(String key, String values) {
