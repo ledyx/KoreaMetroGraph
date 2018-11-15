@@ -1,4 +1,4 @@
-package io.github.xeyez.stationgraph;
+package io.github.devwillee.koreametrograph.cities.seoul;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -66,9 +66,6 @@ public class Model {
 	// 우이신설경전철
 	private String lineUI = "북한산우이 솔밭공원 4·19민주묘지 가오리 화계 삼양 삼양사거리 솔샘 북한산보국문 정릉 성신여대입구 보문 신설동";
 
-	// 자기부상
-	private String lineJ = "인천국제공항 장기주차장 합동청사 국제업무단지 워터파크 용유";
-	
 	
 	private TreeMap<String, ArrayList<String>> stationNamesBylineNum = new TreeMap<>();
 	
@@ -95,7 +92,6 @@ public class Model {
 		assemble("U", lineU);
 		assemble("E", lineE);
 		assemble("UI", lineUI);
-		assemble("J", lineJ);
 	}
 	
 	private void assemble(String key, String values) {

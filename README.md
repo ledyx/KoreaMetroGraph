@@ -1,9 +1,9 @@
-# StationGraph
-수도권 지하철 이전/다음역 및 노선번호 정보를 그래프를 이용하여 구현.
-
+# KoreanMetroGraph
+한국 도시 철도의 이전/다음역 및 노선번호 정보를 그래프 자료구조로 표현.
 
 ## 개발 환경
-- JDK 1.5+
+- JDK 1.8+
+- [Lombok](https://projectlombok.org/)
 
 ## 이런걸 왜 만들었고, 왜 공개하나요?
 2015년부터 만들고 있는 지하철 안드로이드 애플리케이션인 [**지하철 타이머**](https://play.google.com/store/apps/details?id=com.pongdang.jita)에 적용하기 위해 작성되었습니다.
@@ -12,25 +12,28 @@
 
 저와 같은 작업(=삽질)을 하는 누군가 수고를 덜었으면 하는 바람입니다.
 
-
 ## 간단한 사용 방법
+
 ```java
-StationGraph.getInstance().find("신도림").forEach(System.out::println);
+MetroGraphFactory seoulMetroFactory = MetroGraphFactory.getFactory(SeoulMetroGraphFactory.class);
+MetroGraph seoulMetro = seoulMetroFactory.create();
+
+seoulMetro.find("신도림").forEach(System.out::println);
 System.out.println();
-StationGraph.getInstance().find("신도림", "1").forEach(System.out::println);
+seoulMetro.find("신도림", "1").forEach(System.out::println);
 ```
 
 
 ### 결과
 ```java
-StationGraphVO(stationName=구로, lineNum=1, identifier=PREVIOUS, isMainLine=true)
-StationGraphVO(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=true)
-StationGraphVO(stationName=도림천, lineNum=2, identifier=PREVIOUS, isMainLine=false)
-StationGraphVO(stationName=문래, lineNum=2, identifier=PREVIOUS, isMainLine=true)
-StationGraphVO(stationName=대림, lineNum=2, identifier=NEXT, isMainLine=true)
+Station(stationName=구로, lineNum=1, identifier=PREVIOUS, isMainLine=true)
+Station(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=true)
+Station(stationName=도림천, lineNum=2, identifier=PREVIOUS, isMainLine=false)
+Station(stationName=문래, lineNum=2, identifier=PREVIOUS, isMainLine=true)
+Station(stationName=대림, lineNum=2, identifier=NEXT, isMainLine=true)
 
-StationGraphVO(stationName=구로, lineNum=1, identifier=PREVIOUS, isMainLine=true)
-StationGraphVO(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=true)
+Station(stationName=구로, lineNum=1, identifier=PREVIOUS, isMainLine=true)
+Station(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=true)
 ```
 
 - stationName : 역 이름
@@ -50,6 +53,8 @@ StationGraphVO(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=tru
   - UI : 우이신설경전철
 - identifier : 이전역, 현재역, 다음역 구분 (PREVIOUS, CURRENT, NEXT)
 - isMainLine : 이전/다음역이 여러개인 경우 주노선의 역인 지 구분 (boolean)
+
+현재는 서울만 구현되어있지만, 다른 도시 철도도 추가 예정입니다.
 
 
 # MIT License

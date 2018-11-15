@@ -1,16 +1,17 @@
-package io.github.xeyez.stationgraph;
+package io.github.devwillee.koreametrograph.api;
+
+import lombok.Getter;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.TreeMap;
+import java.util.*;
 
 public abstract class AbstractGraph<T> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Getter
+	@ToString
 	public class Edge implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
@@ -22,20 +23,6 @@ public abstract class AbstractGraph<T> implements Serializable {
 			this.toVertex = toVertex;
 		}
 		
-		public T getFromVertex() {
-			return fromVertex;
-		}
-		
-		public T getToVertex() {
-			return toVertex;
-		}
-		
-		
-		@Override
-		public String toString() {
-			return "Edge [fromVertex=" + fromVertex + ", toVertex=" + toVertex + "]";
-		}
-
 		@Override
 		public boolean equals(Object obj) {
 			if(!(obj instanceof AbstractGraph.Edge))
@@ -72,10 +59,6 @@ public abstract class AbstractGraph<T> implements Serializable {
 		this.graphType = GraphType.UNDIRECTED;
 	}
 	
-	public AbstractGraph(GraphType graphType) {
-		this.graphType = graphType;
-	}
-	
 	//정점 추가
 	public void addVertex(T... vertice) {
 		for(T vertex : vertice) {
@@ -83,19 +66,17 @@ public abstract class AbstractGraph<T> implements Serializable {
 			//이미 vertex가 존재하는가?
 			if(edgesByVertices.containsKey(vertex))
 				continue;
-				
+
 			edgesByVertices.put(vertex, new LinkedList<>());
 		}
 	}
+
+	public abstract void addEdge(T fromVertex, T... toVertices);
 	
 	protected void sort(LinkedList<Edge> edges, boolean isAscending) {
-		Collections.sort(edges, new Comparator<Edge>() {
-
-			@Override
-			public int compare(Edge o1, Edge o2) {
-				return isAscending? compareVertice(o1.getToVertex(), o2.getToVertex()) : compareVertice(o2.getToVertex(), o1.getToVertex());
-			}
-		});
+		Collections.sort(edges, (o1, o2) -> isAscending?
+				compareVertice(o1.getToVertex(), o2.getToVertex())
+				: compareVertice(o2.getToVertex(), o1.getToVertex()));
 	}
 	
 	public TreeMap<T, LinkedList<Edge>> getEdgesByVertices() {
@@ -105,14 +86,14 @@ public abstract class AbstractGraph<T> implements Serializable {
 	public LinkedList<Edge> getEdges(T vertex) {
 		return edgesByVertices.get(vertex);
 	}
-	
+
 	public T getVertex(T vertex) {
 		if(!isExists(vertex))
 			throw new NullPointerException();
-		
+
 		return getEdgesByVertices().ceilingKey(vertex);
 	}
-	
+
 	public int getVertextCount() {
 		return edgesByVertices.size();
 	}
@@ -186,30 +167,7 @@ public abstract class AbstractGraph<T> implements Serializable {
 		
 		return edgesByVertexes_copy;
 	}
-	
-	public LinkedList<Edge> getRemovedSymmetryGraph2() {
-		LinkedList<Edge> list = new LinkedList<>();
-		for(LinkedList<Edge> edges : edgesByVertices.values()) {
-			list.addAll(edges);
-		}
-		
-		if(graphType != GraphType.UNDIRECTED)
-			return list;
-		
-		for(int i=0 ; i<list.size() ; i++) {
-			Edge e1 = list.get(i);
-			
-			for(int j=0 ; j<list.size() ; j++) {
-				Edge e2 = list.get(j);
-				
-				if(e1.checkSymmetry(e2))
-					list.remove(j);
-			}
-		}
-		
-		return list;
-	}
-	
+
 	@SuppressWarnings("unchecked")
 	public int compareVertice(T x, T y) {
 		if(x == null || y == null)
