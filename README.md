@@ -1,4 +1,4 @@
-# KoreanMetroGraph
+# KoreaMetroGraph
 한국 도시 철도의 이전/다음역 및 노선번호 정보를 그래프 자료구조로 표현.
 
 ## 개발 환경
