@@ -7,8 +7,7 @@ import io.github.devwillee.koreametrograph.cities.seoul.SeoulMetroGraphFactory;
 public class Test {
 
 	public static void main(String[] args) {
-		MetroGraphFactory seoulMetroFactory = MetroGraphFactory.getFactory(SeoulMetroGraphFactory.class);
-		MetroGraph seoulMetro = seoulMetroFactory.create();
+		MetroGraph seoulMetro = MetroGraphFactory.create(SeoulMetroGraphFactory.class);
 
 		seoulMetro.find("신도림").forEach(System.out::println);
 		System.out.println();

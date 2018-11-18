@@ -23,7 +23,7 @@ public final class MetroGraph extends AbstractGraph<Station> {
         }
     }
 
-    public void removeEdgeSymmetry(String fromStationName, String toStationName, String lineNum) {
+    public void removeSymmetryEdges(String fromStationName, String toStationName, String lineNum) {
         removeEdge(fromStationName, toStationName, lineNum);
         removeEdge(toStationName, fromStationName, lineNum);
     }

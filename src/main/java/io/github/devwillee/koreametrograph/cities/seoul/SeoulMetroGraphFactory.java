@@ -10,12 +10,9 @@ import java.util.TreeMap;
 
 public class SeoulMetroGraphFactory extends MetroGraphFactory {
 
-    // 문자열이 아닌 JSON으로 변경 필요
     @Override
-    public MetroGraph create() {
+    public MetroGraph create(MetroGraph metroGraph) {
         try {
-            MetroGraph metroGraph = new MetroGraph();
-
             TreeMap<String, ArrayList<String>> raw = Model.build();
             for(String lineNum : raw.keySet()) {
 
@@ -36,8 +33,6 @@ public class SeoulMetroGraphFactory extends MetroGraphFactory {
                 }
             }
 
-            adjust(metroGraph);
-
             return metroGraph;
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,15 +41,12 @@ public class SeoulMetroGraphFactory extends MetroGraphFactory {
         return null;
     }
 
-    /**
-     * 예외처리. 이전/다음역이 여러개 인 경우 처리와 이어지지 않은 노선에 대한 삭제.
-     * @param
-     */
-    private void adjust(MetroGraph metroGraph) {
+    @Override
+    public MetroGraph adjust(MetroGraph metroGraph) {
         /* 1호선 */
         // 구로 & 인천
         metroGraph.setSubLine("구로", "가산디지털단지", "1");
-        metroGraph.removeEdgeSymmetry("구로", "인천", "1");
+        metroGraph.removeSymmetryEdges("구로", "인천", "1");
 
         // 금천구청 & 광명
         metroGraph.setSubLine("금천구청", "광명", "1");
@@ -68,16 +60,16 @@ public class SeoulMetroGraphFactory extends MetroGraphFactory {
         /* 2호선 */
         // 신도림 & 신설동
         metroGraph.setSubLine("신도림", "도림천", "2");
-        metroGraph.removeEdgeSymmetry("신도림", "신설동", "2");
+        metroGraph.removeSymmetryEdges("신도림", "신설동", "2");
 
         // 성수
         metroGraph.setSubLine("성수", "용답", "2");
-        metroGraph.removeEdgeSymmetry("성수", "시청", "2");
+        metroGraph.removeSymmetryEdges("성수", "시청", "2");
 
         /* 5호선 */
         // 강동 상일동
         metroGraph.setSubLine("강동", "둔촌동", "5");
-        metroGraph.removeEdgeSymmetry("강동", "상일동", "5");
+        metroGraph.removeSymmetryEdges("강동", "상일동", "5");
 
         /* 6호선 */
         metroGraph.addEdge(new Station("구산", "6", Identifier.CURRENT), new Station("응암", "6", Identifier.NEXT)); // 환형
@@ -86,5 +78,7 @@ public class SeoulMetroGraphFactory extends MetroGraphFactory {
         /* 경의중앙선 */
         metroGraph.setSubLine("가좌", "신촌", "K");
         metroGraph.removeEdge("가좌", "지평", "K");
+
+        return metroGraph;
     }
 }

@@ -15,8 +15,7 @@
 ## 간단한 사용 방법
 
 ```java
-MetroGraphFactory seoulMetroFactory = MetroGraphFactory.getFactory(SeoulMetroGraphFactory.class);
-MetroGraph seoulMetro = seoulMetroFactory.create();
+MetroGraph seoulMetro = MetroGraphFactory.create(SeoulMetroGraphFactory.class);
 
 seoulMetro.find("신도림").forEach(System.out::println);
 System.out.println();
