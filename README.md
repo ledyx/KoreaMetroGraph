@@ -50,7 +50,7 @@ Station(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=true)
   - SU : 수인선
   - U : 의정부경전철
   - UI : 우이신설경전철
-  : J : 자기부상선
+  - J : 자기부상선
   - W : 서해선
 - identifier : 이전역, 현재역, 다음역 구분 (PREVIOUS, CURRENT, NEXT)
 - isMainLine : 이전/다음역이 여러개인 경우 주노선의 역인 지 구분 (boolean)
