@@ -66,6 +66,11 @@ public class Model {
 	// 우이신설경전철
 	private String lineUI = "북한산우이 솔밭공원 4·19민주묘지 가오리 화계 삼양 삼양사거리 솔샘 북한산보국문 정릉 성신여대입구 보문 신설동";
 
+	// 자기부상
+	private String lineJ = "인천공항1터미널 장기주차장 합동청사 국제업무단지 워터파크 용유";
+
+	// 서해
+	private String lineW = "소사 소새울 시흥대야 신천 신현 신현 시흥시청 시흥능곡 달미 선부 초지 원곡 원시";
 	
 	private TreeMap<String, ArrayList<String>> stationNamesBylineNum = new TreeMap<>();
 	
@@ -92,6 +97,8 @@ public class Model {
 		assemble("U", lineU);
 		assemble("E", lineE);
 		assemble("UI", lineUI);
+		assemble("UI", lineJ);
+		assemble("W", lineW);
 	}
 	
 	private void assemble(String key, String values) {

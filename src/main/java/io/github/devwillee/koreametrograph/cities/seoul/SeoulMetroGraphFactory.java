@@ -12,33 +12,25 @@ public class SeoulMetroGraphFactory extends MetroGraphFactory {
 
     @Override
     public MetroGraph create(MetroGraph metroGraph) {
-        try {
-            TreeMap<String, ArrayList<String>> raw = Model.build();
-            for(String lineNum : raw.keySet()) {
+        TreeMap<String, ArrayList<String>> raw = Model.build();
+        for(String lineNum : raw.keySet()) {
 
-                ArrayList<String> stationNames = raw.get(lineNum);
-                for(int i=0 ; i<stationNames.size() - 1 ; i++) {
-                    String stationName1 = stationNames.get(i);
-                    String stationName2 = stationNames.get(i + 1);
+            ArrayList<String> stationNames = raw.get(lineNum);
+            for(int i=0 ; i<stationNames.size() - 1 ; i++) {
+                String stationName1 = stationNames.get(i);
+                String stationName2 = stationNames.get(i + 1);
 
-                    // 추가 정보 필요
+                Station vo1 = new Station(stationName1, lineNum, Identifier.CURRENT);
+                metroGraph.addVertex(vo1);
 
-                    Station vo1 = new Station(stationName1, lineNum, Identifier.CURRENT);
-                    metroGraph.addVertex(vo1);
+                Station vo2 = new Station(stationName2, lineNum, Identifier.CURRENT);
+                metroGraph.addVertex(vo2);
 
-                    Station vo2 = new Station(stationName2, lineNum, Identifier.CURRENT);
-                    metroGraph.addVertex(vo2);
-
-                    metroGraph.addEdge(vo1, vo2);
-                }
+                metroGraph.addEdge(vo1, vo2);
             }
-
-            return metroGraph;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
-        return null;
+        return metroGraph;
     }
 
     @Override
