@@ -36,7 +36,7 @@ Station(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=true)
 ```
 
 - stationName : 역 이름
-- lineNum : 노선 이름 (서울시 열린 데이터 광장의 [서울시 역코드로 지하철역 정보 검색](http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-112&srvType=A&serviceKind=1) API의 LINE_NUM 필드를 기준으로 작성됐습니다.)
+- lineNum : 노선 이름 (서울시 열린 데이터 광장의 [서울시 역코드로 지하철역 정보 검색](http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-112&srvType=A&serviceKind=1) API의 LINE_NUM 필드를 기준으로 작성됐습니다. (자기부상선, 서해선 제외))
   - 1 ~ 9 : 1 ~ 9호선
   - A : 공항철도
   - B : 분당선
@@ -50,6 +50,7 @@ Station(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=true)
   - SU : 수인선
   - U : 의정부경전철
   - UI : 우이신설경전철
+  - W : 서해선
 - identifier : 이전역, 현재역, 다음역 구분 (PREVIOUS, CURRENT, NEXT)
 - isMainLine : 이전/다음역이 여러개인 경우 주노선의 역인 지 구분 (boolean)
 
