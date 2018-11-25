@@ -4,7 +4,7 @@ import io.github.devwillee.koreametrograph.api.MetroGraph;
 import io.github.devwillee.koreametrograph.api.MetroGraphFactory;
 import io.github.devwillee.koreametrograph.cities.seoul.SeoulMetroGraphFactory;
 
-public class Test {
+public class GraphTest {
 
 	public static void main(String[] args) {
 		MetroGraph seoulMetro = MetroGraphFactory.create(SeoulMetroGraphFactory.class);
@@ -12,6 +12,5 @@ public class Test {
 		seoulMetro.find("신도림").forEach(System.out::println);
 		System.out.println();
 		seoulMetro.find("신도림", "1").forEach(System.out::println);
-		seoulMetro.find("소사").forEach(System.out::println);
 	}
 }

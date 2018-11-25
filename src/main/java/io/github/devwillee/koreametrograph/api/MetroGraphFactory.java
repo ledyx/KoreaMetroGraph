@@ -1,5 +1,6 @@
 package io.github.devwillee.koreametrograph.api;
 
+import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class MetroGraphFactory {
@@ -14,10 +15,12 @@ public abstract class MetroGraphFactory {
             }
             else {
                 MetroGraphFactory factory = clazz.newInstance();
-                instance = factory.adjust(factory.create(new MetroGraph()));
+                instance = new MetroGraph();
+                factory.create(instance);
+                factory.truncate(instance);
                 instanceManager.put(clazz.getName(), instance);
             }
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException | IOException e) {
             e.printStackTrace();
         }
 
@@ -29,12 +32,12 @@ public abstract class MetroGraphFactory {
      * @param metroGraph
      * @return Edge를 제대로 조정하지 않은 Graph
      */
-    public abstract MetroGraph create(MetroGraph metroGraph);
+    public abstract void create(MetroGraph metroGraph) throws IOException;
 
     /**
      * 예외처리. 이전/다음역이 여러개 인 경우 처리와 이어지지 않은 노선에 대한 삭제. create 호출 이후 호출 된다.
      * @param metroGraph
      * @return 조정된 graph
      */
-    public abstract MetroGraph adjust(MetroGraph metroGraph);
+    public abstract void truncate(MetroGraph metroGraph);
 }
