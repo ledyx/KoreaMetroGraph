@@ -568,7 +568,7 @@
     {"statnFnm":"수지구청","statnTnm":"동천","sctnDstnc":-1,"sctnTime":3},
     {"statnFnm":"동천","statnTnm":"미금","sctnDstnc":-1,"sctnTime":3},
     {"statnFnm":"미금","statnTnm":"정자","sctnDstnc":1800,"sctnTime":3},
-    {"statnFnm":"동천","statnTnm":"정자","sctnDstnc":-1,"sctnTime":},
+    {"statnFnm":"동천","statnTnm":"정자","sctnDstnc":-1,"sctnTime":2},
     {"statnFnm":"정자","statnTnm":"판교","sctnDstnc":3300,"sctnTime":4},
     {"statnFnm":"판교","statnTnm":"청계산입구","sctnDstnc":8500,"sctnTime":7},
     {"statnFnm":"청계산입구","statnTnm":"양재시민의숲","sctnDstnc":3000,"sctnTime":3},
