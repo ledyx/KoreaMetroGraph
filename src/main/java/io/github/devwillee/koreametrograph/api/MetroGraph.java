@@ -1,15 +1,22 @@
 package io.github.devwillee.koreametrograph.api;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.*;
 import java.util.*;
+import java.util.stream.Stream;
 
 public final class MetroGraph extends AbstractGraph<Station> {
 
-    public MetroGraph() {
+    private List<Map<String, String>> jsonToCollection;
+
+    public MetroGraph(String jsonPath) throws IOException {
         graphType = GraphType.UNDIRECTED;
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(new File(jsonPath)).get("DATA");
+        jsonToCollection = mapper.convertValue(root, List.class);
     }
 
     private final String[] lineNums = {"A", "B", "E", "G", "I", "I2", "K", "KK", "S", "SU", "U", "UI"};
@@ -28,9 +35,32 @@ public final class MetroGraph extends AbstractGraph<Station> {
         removeEdge(toStationName, fromStationName, lineNum);
     }
 
+    /**
+     * JSON 파일을 읽어 역정보, 경위도등의 부가정보를 채워 넣는다.
+     * @param station
+     */
+    private void enrichWithJSON(Station station) {
+        // JSON 파일에 노선 정보가 없거나 경위도가 있는 vertex는 제외
+        if(Stream.of("J", "W").anyMatch(x -> x.equalsIgnoreCase(station.getLineNum())) ||
+                Stream.of(station.getLatitude(), station.getLongitude()).anyMatch(x -> x != 0))
+            return;
+
+        Map<String, String> info
+                = jsonToCollection.stream()
+                .filter(x -> x.get("station_nm").equalsIgnoreCase(
+                        station.getStationName()) &&
+                        x.get("line_num").equalsIgnoreCase(station.getLineNum()))
+                .findFirst().get();
+
+        station.setStationCode(info.get("station_cd"));
+        station.setLatitude(Double.parseDouble(info.get("xpoint_wgs")));
+        station.setLongitude(Double.parseDouble(info.get("ypoint_wgs")));
+    }
+
     @Override
     public void addVertex(Station... vertices) {
         for(Station vertex : vertices) {
+            enrichWithJSON(vertex);
 
             //이미 vertex가 존재하는가?
             if(edgesByVertices.containsKey(vertex))
@@ -140,13 +170,11 @@ public final class MetroGraph extends AbstractGraph<Station> {
     /**
      * Depth First Search
      */
-    public LinkedList<Station> dfs(boolean isAscending) {
-        return dfs(edgesByVertices.firstEntry().getKey(), isAscending);
-    }
-
     public LinkedList<Station> dfs(Station vertex, boolean isAscending) {
         if(!checkLineNum(vertex.getLineNum()))
             throw new IllegalArgumentException("Unavailable lineNum");
+
+        enrichWithJSON(vertex);
 
         LinkedList<Station> results = new LinkedList<>();
 
@@ -180,9 +208,21 @@ public final class MetroGraph extends AbstractGraph<Station> {
     }
 
     /**
+     * Depth First Search
+     */
+    public LinkedList<Station> dfs(boolean isAscending) {
+        return dfs(edgesByVertices.firstEntry().getKey(), isAscending);
+    }
+
+    /**
      * Beneath First Search
      */
     public LinkedList<Station> bfs(Station vertex, boolean isAscending) {
+        if(!checkLineNum(vertex.getLineNum()))
+            throw new IllegalArgumentException("Unavailable lineNum");
+
+        enrichWithJSON(vertex);
+
         LinkedList<Station> results = new LinkedList<>();
 
         HashSet<Station> checkVisitSet = new HashSet<>();
