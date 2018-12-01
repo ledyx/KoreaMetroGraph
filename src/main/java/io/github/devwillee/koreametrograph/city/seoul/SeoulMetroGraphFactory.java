@@ -1,9 +1,6 @@
 package io.github.devwillee.koreametrograph.city.seoul;
 
-import io.github.devwillee.koreametrograph.api.Identifier;
-import io.github.devwillee.koreametrograph.api.MetroGraph;
-import io.github.devwillee.koreametrograph.api.MetroGraphFactory;
-import io.github.devwillee.koreametrograph.api.Station;
+import io.github.devwillee.koreametrograph.api.*;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -11,8 +8,13 @@ import java.util.TreeMap;
 public class SeoulMetroGraphFactory extends MetroGraphFactory {
 
     @Override
-    protected String getJSONPath() {
-        return "src/test/resources/seoul.json";
+    protected String getVerticesJSONPath() {
+        return "src/main/resources/seoul/vertices.json";
+    }
+
+    @Override
+    protected String getEdgesJSONPath() {
+        return "src/main/resources/seoul/edges.json";
     }
 
     @Override
@@ -29,7 +31,7 @@ public class SeoulMetroGraphFactory extends MetroGraphFactory {
                 Station station2 = new Station(stationName2, lineNum);
 
                 metroGraph.addVertex(station1, station2);
-                metroGraph.addEdge(station1, station2);
+                metroGraph.addEdge(station1, station2, new MetroWeight(Integer.MIN_VALUE, Integer.MIN_VALUE));
             }
         }
     }
@@ -66,7 +68,8 @@ public class SeoulMetroGraphFactory extends MetroGraphFactory {
 
         /* 6호선 */
         metroGraph.addEdge(new Station("구산", "6"),
-                           new Station("응암", "6", Identifier.NEXT)); // 환형
+                           new Station("응암", "6", Identifier.NEXT),
+                           new MetroWeight(Integer.MIN_VALUE, Integer.MIN_VALUE)); // 환형
         metroGraph.setSubLine("응암", "구산", "6");
 
         /* 경의중앙선 */

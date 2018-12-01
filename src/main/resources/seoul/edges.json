@@ -717,7 +717,7 @@
     {"from":"초지","to":"원곡","distance":-1,"time":3},
     {"from":"원곡","to":"원시","distance":-1,"time":2}
   ],
-  "J": [
+  "M": [
     {"from":"인천공항1터미널","to":"장기주차장","distance":-1,"time":2},
     {"from":"장기주차장","to":"합동청사","distance":-1,"time":2},
     {"from":"합동청사","to":"파라다이스시티","distance":-1,"time":2},

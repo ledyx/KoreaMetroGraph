@@ -15,7 +15,7 @@ public abstract class MetroGraphFactory {
             }
             else {
                 MetroGraphFactory factory = clazz.newInstance();
-                instance = new MetroGraph(factory.getJSONPath());
+                instance = new MetroGraph(factory.getVerticesJSONPath(), factory.getEdgesJSONPath());
                 factory.create(instance);
                 factory.truncate(instance);
                 instanceManager.put(clazz.getName(), instance);
@@ -27,12 +27,13 @@ public abstract class MetroGraphFactory {
         return instance;
     }
 
-    protected abstract String getJSONPath();
+    protected abstract String getVerticesJSONPath();
+    protected abstract String getEdgesJSONPath();
 
     /**
      * Graph를 생성한다. 단, 이어지지 않은 Edge가 포함된다.
      * @param metroGraph
-     * @return Edge를 제대로 조정하지 않은 Graph
+     * @return Edge를 제대로 조정하지 않은 AbstractUndirectedWeightedGraph
      */
     public abstract void create(MetroGraph metroGraph);
 
