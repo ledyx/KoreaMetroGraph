@@ -1,4 +1,4 @@
-package io.github.devwillee.koreametrograph.cities.seoul;
+package io.github.devwillee.koreametrograph.city.seoul;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -65,7 +65,7 @@ public class Model {
 
 	// 에버라인 (용인경전철)
 	private String lineE = "기흥 강남대 지석 어정 동백 초당 삼가 시청·용인대 명지대 김량장 운동장·송담대 고진 보평 둔전 전대·에버랜드";
-	
+
 	// 우이신설경전철
 	private String lineUI = "북한산우이 솔밭공원 4·19민주묘지 가오리 화계 삼양 삼양사거리 솔샘 북한산보국문 정릉 성신여대입구 보문 신설동";
 
@@ -74,9 +74,9 @@ public class Model {
 
 	// 서해
 	private String lineW = "소사 소새울 시흥대야 신천 신현 시흥시청 시흥능곡 달미 선부 초지 원곡 원시";
-	
+
 	private TreeMap<String, ArrayList<String>> stationNamesBylineNum = new TreeMap<>();
-	
+
 	private Model() {
 		assemble("1", line1);
 		assemble("2", line2);
@@ -87,7 +87,7 @@ public class Model {
 		assemble("7", line7);
 		assemble("8", line8);
 		assemble("9", line9);
-		
+
 		assemble("A", lineA);
 		assemble("K", lineK);
 		assemble("G", lineG);
@@ -103,17 +103,17 @@ public class Model {
 		assemble("J", lineJ);
 		assemble("W", lineW);
 	}
-	
+
 	private void assemble(String key, String values) {
 		ArrayList<String> stations = new ArrayList<>();
 		String[] arr = values.split(" ");
 		for(String e : arr) {
 			stations.add(e);
 		}
-		
+
 		stationNamesBylineNum.put(key, stations);
 	}
-	
+
 	public static TreeMap<String, ArrayList<String>> build() {
 		return new Model().stationNamesBylineNum;
 	}

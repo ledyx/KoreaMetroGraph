@@ -1,4 +1,4 @@
-package io.github.devwillee.koreametrograph.cities.seoul;
+package io.github.devwillee.koreametrograph.city.seoul;
 
 import io.github.devwillee.koreametrograph.api.Identifier;
 import io.github.devwillee.koreametrograph.api.MetroGraph;
@@ -25,13 +25,11 @@ public class SeoulMetroGraphFactory extends MetroGraphFactory {
                 String stationName1 = stationNames.get(i);
                 String stationName2 = stationNames.get(i + 1);
 
-                Station vo1 = new Station(stationName1, lineNum, Identifier.CURRENT);
-                metroGraph.addVertex(vo1);
+                Station station1 = new Station(stationName1, lineNum);
+                Station station2 = new Station(stationName2, lineNum);
 
-                Station vo2 = new Station(stationName2, lineNum, Identifier.CURRENT);
-                metroGraph.addVertex(vo2);
-
-                metroGraph.addEdge(vo1, vo2);
+                metroGraph.addVertex(station1, station2);
+                metroGraph.addEdge(station1, station2);
             }
         }
     }
@@ -67,7 +65,7 @@ public class SeoulMetroGraphFactory extends MetroGraphFactory {
         metroGraph.removeSymmetryEdges("강동", "상일동", "5");
 
         /* 6호선 */
-        metroGraph.addEdge(new Station("구산", "6", Identifier.CURRENT),
+        metroGraph.addEdge(new Station("구산", "6"),
                            new Station("응암", "6", Identifier.NEXT)); // 환형
         metroGraph.setSubLine("응암", "구산", "6");
 

@@ -3,18 +3,15 @@ package io.github.devwillee.koreametrograph.api;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.io.Serializable;
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.TreeMap;
 
-public abstract class AbstractGraph<T> implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-
+public abstract class AbstractGraph<T> {
 	@Getter
 	@ToString
-	public class Edge implements Serializable {
-		private static final long serialVersionUID = 1L;
-		
+	public class Edge {
 		protected T fromVertex;
 		protected T toVertex;
 		

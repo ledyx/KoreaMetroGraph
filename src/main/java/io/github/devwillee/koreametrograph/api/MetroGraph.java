@@ -3,7 +3,8 @@ package io.github.devwillee.koreametrograph.api;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -19,7 +20,7 @@ public final class MetroGraph extends AbstractGraph<Station> {
         jsonToCollection = mapper.convertValue(root, List.class);
     }
 
-    private final String[] lineNums = {"A", "B", "E", "G", "I", "I2", "K", "KK", "S", "SU", "U", "UI"};
+    private final String[] lineNums = {"A", "B", "E", "G", "I", "I2", "K", "KK", "S", "SU", "U", "UI", "J", "W"};
 
     public void setSubLine(String fromStationName, String toStationName, String lineNum) {
         for(AbstractGraph<Station>.Edge e : getEdges(fromStationName)) {
@@ -30,6 +31,7 @@ public final class MetroGraph extends AbstractGraph<Station> {
         }
     }
 
+    // from->to, to->from edge 모두 삭제
     public void removeSymmetryEdges(String fromStationName, String toStationName, String lineNum) {
         removeEdge(fromStationName, toStationName, lineNum);
         removeEdge(toStationName, fromStationName, lineNum);
@@ -50,11 +52,16 @@ public final class MetroGraph extends AbstractGraph<Station> {
                 .filter(x -> x.get("station_nm").equalsIgnoreCase(
                         station.getStationName()) &&
                         x.get("line_num").equalsIgnoreCase(station.getLineNum()))
-                .findFirst().get();
+                .findFirst().orElse(null);
+
+        if(info == null)
+            System.out.println(station);
 
         station.setStationCode(info.get("station_cd"));
         station.setLatitude(Double.parseDouble(info.get("xpoint_wgs")));
         station.setLongitude(Double.parseDouble(info.get("ypoint_wgs")));
+        station.setStationName_han(info.get("station_nm_han"));
+        station.setStationName_eng(info.get("station_nm_eng"));
     }
 
     @Override
@@ -66,15 +73,12 @@ public final class MetroGraph extends AbstractGraph<Station> {
             if(edgesByVertices.containsKey(vertex))
                 continue;
 
-            // Key와 Value가 완전히 참조가 분리되도록 깊은 복사
-            Station vertexCopy = deepCopy(vertex);
-            vertexCopy.setIdentifier(Identifier.CURRENT);
-            edgesByVertices.put(vertexCopy, new LinkedList<>());
+            edgesByVertices.put(vertex, new LinkedList<>());
         }
     }
 
     public LinkedList<AbstractGraph<Station>.Edge> getEdges(String stationName) {
-        return super.getEdges(new Station(stationName, "", Identifier.CURRENT));
+        return super.getEdges(new Station(stationName, ""));
     }
 
     // 일반 간선 추가
@@ -87,8 +91,8 @@ public final class MetroGraph extends AbstractGraph<Station> {
             if (!edgesByVertices.containsKey(toVertex))
                 throw new NullPointerException("The toVertex is not exists.");
 
+            // fromVertex의 default Identifier는 "Current"이므로 fromVertex의 Identifier 설정g하지 않음.
             toVertex.setIdentifier(Identifier.NEXT);
-            fromVertex.setIdentifier(Identifier.PREVIOUS);
 
 
             LinkedList<Edge> edges = edgesByVertices.get(fromVertex);
@@ -99,21 +103,12 @@ public final class MetroGraph extends AbstractGraph<Station> {
 
             edges.add(newEdge);
 
-            // 무방향 그래프 대칭 처리
-            if (graphType == GraphType.UNDIRECTED)
-                addVertexForUndirectedGraph(toVertex, fromVertex);
-        }
-
-        // fromVertex만 현재역으로 변환
-        for(LinkedList<Edge> vertex : edgesByVertices.values()) {
-            for(Edge edge : vertex) {
-                edge.fromVertex.setIdentifier(Identifier.CURRENT);
-            }
+            addVertexForUndirectedGraph(toVertex, fromVertex);
         }
     }
 
     public void removeEdge(String fromStationName, String toStationName, String lineNum) {
-        LinkedList<Edge> edges = edgesByVertices.get(new Station(fromStationName, lineNum, Identifier.CURRENT));
+        LinkedList<Edge> edges = edgesByVertices.get(new Station(fromStationName, lineNum));
 
         int result = Integer.MIN_VALUE;
 
@@ -134,16 +129,15 @@ public final class MetroGraph extends AbstractGraph<Station> {
 
     // 무방향 그래프 대칭 처리
     private void addVertexForUndirectedGraph(Station toVertex, Station fromVertex) {
+        if (!edgesByVertices.containsKey(toVertex))
+            edgesByVertices.put(toVertex, new LinkedList<>());
 
-        // 참조 문제로 인한 Bug 해결
-        Station toVertexCopy = deepCopy(toVertex);
-        Station fromVertexCopy = deepCopy(fromVertex);
+        // 각 vetex의 identifier 재설정을 위한 참조 문제 해결
+        Station toVertexCopy = toVertex.clone();
+        Station fromVertexCopy = fromVertex.clone();
 
-        if (!edgesByVertices.containsKey(toVertexCopy))
-            edgesByVertices.put(toVertexCopy, new LinkedList<>());
-
-        fromVertex.setIdentifier(Identifier.PREVIOUS);
-        toVertex.setIdentifier(Identifier.NEXT);
+        toVertexCopy.setIdentifier(Identifier.CURRENT);
+        fromVertexCopy.setIdentifier(Identifier.PREVIOUS);
 
         LinkedList<Edge> edges = edgesByVertices.get(toVertexCopy);
         edges.add(new Edge(toVertexCopy, fromVertexCopy));
@@ -261,48 +255,30 @@ public final class MetroGraph extends AbstractGraph<Station> {
         return bfs(edgesByVertices.firstEntry().getKey(), isAscending);
     }
 
-    @SuppressWarnings("unchecked")
-    private <T> T deepCopy(T obj) {
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(baos);
-            oos.writeObject(obj);
-
-            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-            ObjectInputStream ois = new ObjectInputStream(bais);
-            return (T)ois.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     /**
      * Wrapping. 편하게 쓰기 위한 Helper Method.
      * @param stationName
      * @return
      */
     public List<Station> find(String stationName, String lineNum) {
-        try {
-            //return getEdges(stationName).stream().filter(edge -> edge.getToVertex().getLineNum().equals(lineNum)).map(Edge::getToVertex).collect(Collectors.toList());
+        ArrayList<Station> list = new ArrayList<>();
 
-            // 속도에 민감하다면 그냥 for 사용.
-            ArrayList<Station> list = new ArrayList<>();
-            for(Edge edge : getEdges(stationName)) {
-                Station toVertex = edge.getToVertex();
+        boolean isAddedCurrentStation = false;
 
-                if(toVertex.getLineNum().equals(lineNum)) {
-                    list.add(toVertex);
-                }
+        for(Edge edge : getEdges(stationName)) {
+            Station fromVertex = edge.getFromVertex();
+            if(fromVertex.getLineNum().equals(lineNum) && !isAddedCurrentStation) {
+                list.add(fromVertex);
+                isAddedCurrentStation = true;
             }
 
-            return list;
-        } catch (Exception e) {
-            e.printStackTrace();
+            Station toVertex = edge.getToVertex();
+            if(toVertex.getLineNum().equals(lineNum)) {
+                list.add(toVertex);
+            }
         }
 
-        return null;
+        return list;
     }
 
     /**
@@ -311,20 +287,20 @@ public final class MetroGraph extends AbstractGraph<Station> {
      * @return
      */
     public List<Station> find(String stationName) {
-        try {
-            List<Station> list = new ArrayList<>();
+        List<Station> list = new ArrayList<>();
 
-            for(Edge e : getEdges(stationName)) {
-                list.add(e.getToVertex());
+        String currentLineNum = "";
+
+        for(Edge edge : getEdges(stationName)) {
+            Station fromVertex = edge.getFromVertex();
+            if(!fromVertex.getLineNum().equals(currentLineNum)) {
+                currentLineNum = fromVertex.getLineNum();
+                list.add(fromVertex);
             }
 
-            return list;
-
-            //return getEdges(stationName).stream().map(Edge::getToVertex).collect(Collectors.toList());
-        } catch (Exception e) {
-            e.printStackTrace();
+            list.add(edge.getToVertex());
         }
 
-        return null;
+        return list;
     }
 }
