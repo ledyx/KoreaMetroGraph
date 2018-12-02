@@ -9,12 +9,12 @@ public class SeoulMetroGraphFactory extends MetroGraphFactory {
 
     @Override
     protected String getVerticesJSONPath() {
-        return "src/main/resources/seoul/vertices.json";
+        return "src/main/resources/seoul/vertices_minimal_simple.json";
     }
 
     @Override
     protected String getEdgesJSONPath() {
-        return "src/main/resources/seoul/edges.json";
+        return "src/main/resources/seoul/edges_simple.json";
     }
 
     @Override

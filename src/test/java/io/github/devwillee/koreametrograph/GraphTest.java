@@ -2,7 +2,7 @@ package io.github.devwillee.koreametrograph;
 
 import io.github.devwillee.koreametrograph.api.MetroGraph;
 import io.github.devwillee.koreametrograph.api.MetroGraphFactory;
-import io.github.devwillee.koreametrograph.cities.seoul.SeoulMetroGraphFactory;
+import io.github.devwillee.koreametrograph.city.seoul.SeoulMetroGraphFactory;
 
 public class GraphTest {
 

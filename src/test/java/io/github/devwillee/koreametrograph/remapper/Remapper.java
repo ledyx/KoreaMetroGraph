@@ -15,7 +15,7 @@ public class Remapper {
         // String[] order_lines = {"A", "KK", "SU", "I2", "U", "E", "UI"};
 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(new File("src/test/resources/seoul.json")).get("DATA");
+        JsonNode root = mapper.readTree(new File("src/test/resources/remapVertices.json")).get("DATA");
 
         List<Map<String, String>> temp = mapper.convertValue(root, List.class);
 
