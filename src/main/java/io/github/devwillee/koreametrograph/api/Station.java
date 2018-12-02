@@ -1,6 +1,5 @@
 package io.github.devwillee.koreametrograph.api;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -52,6 +51,12 @@ public class Station implements Vertex<Station> {
 	@Override
 	public int compareTo(Station o) {
 		return this.stationName.compareTo(o.stationName);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Station station = (Station) obj;
+		return this.stationName.equals(station.getStationName()) && this.lineNum.equals(station.getLineNum());
 	}
 
 	@Override

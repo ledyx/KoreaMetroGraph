@@ -3,6 +3,7 @@ package io.github.devwillee.koreametrograph.api;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,21 +11,50 @@ import java.util.*;
 
 public final class MetroGraph extends AbstractUndirectedWeightedGraph<Station, MetroEdge, MetroWeight> {
 
-    //private List<Map<String, String>> vertices;
+    private final ObjectMapper mapper = new ObjectMapper();
+
     private List<Station> vertices;
+    @Getter
+    private final Map<String, List<MetroEdge>> edgesByLineNum;
 
     public MetroGraph(String verticesJsonPath, String edgesJsonPath) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(new File(verticesJsonPath)).get("DATA");
-        vertices = mapper.convertValue(root, new TypeReference<List<Station>>(){});
+        // Vertices 생성
+        JsonNode verticesRoot = mapper.readTree(new File(verticesJsonPath)).get("DATA");
+        vertices = mapper.convertValue(verticesRoot, new TypeReference<List<Station>>(){});
+
+        // Edges 생성
+        edgesByLineNum = new HashMap<>();
+        JsonNode edgesRoot = mapper.readTree(new File(edgesJsonPath));
+        edgesRoot.fields().forEachRemaining(edgeNodesByLineNum -> {
+            String lineNum = edgeNodesByLineNum.getKey();
+            JsonNode edgeNodes = edgeNodesByLineNum.getValue();
+
+            ArrayList<MetroEdge> edges = new ArrayList<>();
+
+            for(JsonNode edge : edgeNodes) {
+                Station from = new Station(edge.findValue("from").asText(), lineNum);
+                Station to = new Station(edge.findValue("to").asText(), lineNum);
+                int time = edge.findValue("time").asInt();
+                int distance = edge.findValue("distance").asInt();
+
+                MetroWeight weight = new MetroWeight(time, distance);
+
+                addVertex(from, to);
+                addEdge(from, to, weight);
+
+                edges.add(new MetroEdge(from, to, new MetroWeight(time, distance)));
+            }
+
+            edgesByLineNum.put(lineNum, edges);
+        });
     }
 
     private final String[] lineNums = {"A", "B", "E", "G", "I", "I2", "K", "KK", "S", "SU", "U", "UI", "M", "W"};
 
     public void setSubLine(String fromStationName, String toStationName, String lineNum) {
         for(MetroEdge e : getEdges(fromStationName)) {
-            if(e.getToVertex().getStationName().equals(toStationName) && e.getToVertex().getLineNum().equals(lineNum)) {
-                e.getToVertex().setMainLine(false);
+            if(e.getTo().getStationName().equals(toStationName) && e.getTo().getLineNum().equals(lineNum)) {
+                e.getTo().setMainLine(false);
                 break;
             }
         }
@@ -67,24 +97,60 @@ public final class MetroGraph extends AbstractUndirectedWeightedGraph<Station, M
 
     // 일반 간선 추가
     @Override
-    public void addEdge(Station fromVertex, Station toVertex, MetroWeight weight) throws NullPointerException {
-        if (!edgesByVertices.containsKey(fromVertex))
-            throw new NullPointerException("The fromVertex is not exists.");
+    public void addEdge(Station from, Station to, MetroWeight weight) throws NullPointerException {
+        if (!edgesByVertices.containsKey(from))
+            throw new NullPointerException("'from' is not exists.\n" + from);
 
-        if (!edgesByVertices.containsKey(toVertex))
-            throw new NullPointerException("The toVertex is not exists.");
+        if (!edgesByVertices.containsKey(to))
+            throw new NullPointerException("'to' is not exists.\n" + to);
 
-        Station enrichedFromVertex = enrichWithJSON(fromVertex);
-        Station enrichedToVertex = enrichWithJSON(toVertex);
+        // 중복 추가 방지 (정점 하나에 이어진 정점이 2개 이상 포함될 수가 없으므로)
+        LinkedList<MetroEdge> edges = edgesByVertices.get(from);
+        for (MetroEdge edge : edges) {
+            if(edge.equals(from, to)) {
+                StringBuilder errorMessageBuilder = new StringBuilder();
+                errorMessageBuilder.append("This Edge is already added.");
+
+                errorMessageBuilder.append("\nfrom : ");
+                errorMessageBuilder.append("{station_nm : ");
+                errorMessageBuilder.append(from.getStationName());
+                errorMessageBuilder.append(", line_num : ");
+                errorMessageBuilder.append(from.getLineNum());
+                errorMessageBuilder.append("}");
+
+                errorMessageBuilder.append("\nto : ");
+                errorMessageBuilder.append("{station_nm : ");
+                errorMessageBuilder.append(to.getStationName());
+                errorMessageBuilder.append(", line_num : ");
+                errorMessageBuilder.append(to.getLineNum());
+                errorMessageBuilder.append("}");
+
+                throw new IllegalArgumentException(errorMessageBuilder.toString());
+            }
+
+        }
+
+
+
+
+
+
+
+
+        Station enrichedFromVertex = enrichWithJSON(from);
+        Station enrichedToVertex = enrichWithJSON(to);
 
         // fromVertex의 default Identifier는 "Current"이므로 fromVertex의 Identifier 설정하지 않음.
         enrichedToVertex.setIdentifier(Identifier.NEXT);
 
-        LinkedList<MetroEdge> edges = edgesByVertices.get(enrichedFromVertex);
+        //LinkedList<MetroEdge> edges = edgesByVertices.get(enrichedFromVertex);
+
         MetroEdge newEdge = new MetroEdge(enrichedFromVertex, enrichedToVertex, weight);
+
         // 중복 추가 방지 (정점 하나에 이어진 정점이 2개 이상 포함될 수가 없으므로)
-        if(edges.contains(newEdge))
-            return;
+        /*if(edges.contains(newEdge)) {
+            throw new IllegalArgumentException("This Edge is an already added.\n" + newEdge);
+        }*/
 
         edges.add(newEdge);
 
@@ -116,8 +182,8 @@ public final class MetroGraph extends AbstractUndirectedWeightedGraph<Station, M
         for(int i=0 ; i<edges.size() ; i++) {
             MetroEdge e = edges.get(i);
 
-            if(e.getToVertex().getStationName().equals(to.getStationName())
-                    && e.getToVertex().getLineNum().equals(to.getLineNum())) {
+            if(e.getTo().getStationName().equals(to.getStationName())
+                    && e.getTo().getLineNum().equals(to.getLineNum())) {
                 result = i;
                 break;
             }
@@ -176,7 +242,7 @@ public final class MetroGraph extends AbstractUndirectedWeightedGraph<Station, M
 
             for(MetroEdge edge : edgesByVertices.get(poppedVertex)) {
 
-                Station linkedVertex = edge.getToVertex();
+                Station linkedVertex = edge.getTo();
                 linkedVertex = edgesByVertices.ceilingKey(linkedVertex); //추가
 
                 if(!checkVisitSet.contains(linkedVertex)) {
@@ -221,7 +287,7 @@ public final class MetroGraph extends AbstractUndirectedWeightedGraph<Station, M
             sort(edgesByVertices.get(dequeuedVertex), isAscending);
 
             for(MetroEdge edge : edgesByVertices.get(dequeuedVertex)) {
-                Station linkedVertex = edge.getToVertex();
+                Station linkedVertex = edge.getTo();
                 linkedVertex = edgesByVertices.ceilingKey(linkedVertex); //추가
 
                 if(!checkVisitSet.contains(linkedVertex)) {
@@ -252,13 +318,13 @@ public final class MetroGraph extends AbstractUndirectedWeightedGraph<Station, M
         boolean isAddedCurrentStation = false;
 
         for(MetroEdge edge : getEdges(stationName)) {
-            Station fromVertex = edge.getFromVertex();
+            Station fromVertex = edge.getFrom();
             if(fromVertex.getLineNum().equals(lineNum) && !isAddedCurrentStation) {
                 list.add(fromVertex);
                 isAddedCurrentStation = true;
             }
 
-            Station toVertex = edge.getToVertex();
+            Station toVertex = edge.getTo();
             if(toVertex.getLineNum().equals(lineNum)) {
                 list.add(toVertex);
             }
@@ -278,13 +344,13 @@ public final class MetroGraph extends AbstractUndirectedWeightedGraph<Station, M
         String currentLineNum = "";
 
         for(MetroEdge edge : getEdges(stationName)) {
-            Station fromVertex = edge.getFromVertex();
+            Station fromVertex = edge.getFrom();
             if(!fromVertex.getLineNum().equals(currentLineNum)) {
                 currentLineNum = fromVertex.getLineNum();
                 list.add(fromVertex);
             }
 
-            list.add(edge.getToVertex());
+            list.add(edge.getTo());
         }
 
         return list;

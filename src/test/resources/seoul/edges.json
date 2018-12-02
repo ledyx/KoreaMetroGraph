@@ -453,7 +453,7 @@
     {"from":"오빈","to":"아신","distance":2860,"time":4},
     {"from":"아신","to":"국수","distance":4000,"time":5},
     {"from":"국수","to":"신원","distance":3000,"time":4},
-    {"from":"신원","statTnm":"양수","distance":4750,"time":4},
+    {"from":"신원","to":"양수","distance":4750,"time":4},
     {"from":"양수","to":"운길산","distance":2060,"time":2},
     {"from":"운길산","to":"팔당","distance":6400,"time":5},
     {"from":"팔당","to":"도심","distance":4280,"time":5},

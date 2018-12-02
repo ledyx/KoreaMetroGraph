@@ -86,11 +86,11 @@ public abstract class AbstractUndirectedWeightedGraph<V extends Vertex, WE exten
 		// 대칭 그래프 삭제
 		for(LinkedList<WE> edges1 : edgesByVertices.values()) {
 			for(WE edge1 : edges1) {
-				LinkedList<WE> edges2 = graphClone.get(edge1.getToVertex());
+				LinkedList<WE> edges2 = graphClone.get(edge1.getTo());
 				for(int i=0 ; i<edges2.size() ; i++) {
 
 					WE edge2 = edges2.get(i);
-					if(edge2.getToVertex().equals(edge1.getFromVertex()))
+					if(edge2.getTo().equals(edge1.getFrom()))
 						edges2.remove();
 
 				}
@@ -116,8 +116,8 @@ public abstract class AbstractUndirectedWeightedGraph<V extends Vertex, WE exten
 
 	protected void sort(LinkedList<WE> edges, boolean isAscending) {
 		Collections.sort(edges, (o1, o2) -> isAscending?
-				compareVertices((V) o1.getToVertex(), (V) o2.getToVertex())
-				: compareVertices((V) o2.getToVertex(), (V) o1.getToVertex()));
+				compareVertices((V) o1.getTo(), (V) o2.getTo())
+				: compareVertices((V) o2.getTo(), (V) o1.getTo()));
 	}
 
 	@Override
@@ -133,9 +133,9 @@ public abstract class AbstractUndirectedWeightedGraph<V extends Vertex, WE exten
 			sort(list, true);
 			
 			for(WE edge : list) {
-				sb.append(edge.getFromVertex());
+				sb.append(edge.getFrom());
 				sb.append("-");
-				sb.append(edge.getToVertex());
+				sb.append(edge.getTo());
 				
 				sb.append(" ");
 			}
