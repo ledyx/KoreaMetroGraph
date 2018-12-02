@@ -18,10 +18,7 @@ public class Station implements Vertex<Station> {
 	@JsonProperty("line_num")
 	private String lineNum;
 
-	@JsonIgnore
 	private Identifier identifier = Identifier.CURRENT;
-
-	@JsonIgnore
 	private boolean mainLine = true;
 
 	@JsonProperty("fr_code")

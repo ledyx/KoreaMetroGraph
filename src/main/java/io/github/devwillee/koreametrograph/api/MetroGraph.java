@@ -78,7 +78,7 @@ public final class MetroGraph extends AbstractUndirectedWeightedGraph<Station, M
         Station enrichedToVertex = enrichWithJSON(toVertex);
 
         // fromVertex의 default Identifier는 "Current"이므로 fromVertex의 Identifier 설정하지 않음.
-        toVertex.setIdentifier(Identifier.NEXT);
+        enrichedToVertex.setIdentifier(Identifier.NEXT);
 
         LinkedList<MetroEdge> edges = edgesByVertices.get(enrichedFromVertex);
         MetroEdge newEdge = new MetroEdge(enrichedFromVertex, enrichedToVertex, weight);

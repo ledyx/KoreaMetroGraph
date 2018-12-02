@@ -24,18 +24,23 @@ seoulMetro.find("신도림", "1").forEach(System.out::println);
 
 
 ### 결과
-```java
-Station(stationName=구로, lineNum=1, identifier=PREVIOUS, isMainLine=true)
-Station(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=true)
-Station(stationName=도림천, lineNum=2, identifier=PREVIOUS, isMainLine=false)
-Station(stationName=문래, lineNum=2, identifier=PREVIOUS, isMainLine=true)
-Station(stationName=대림, lineNum=2, identifier=NEXT, isMainLine=true)
+```json
+{"identifier":"CURRENT","mainLine":true,"station_nm":"신도림","line_num":"1","fr_code":"140","station_cd":"1007","xpoint_wgs":37.508725,"ypoint_wgs":126.891295,"station_nm_han":"新道林","station_nm_eng":"Sindorim"}
+{"identifier":"PREVIOUS","mainLine":true,"station_nm":"구로","line_num":"1","fr_code":"141","station_cd":"1701","xpoint_wgs":37.503039,"ypoint_wgs":126.881966,"station_nm_han":"九老","station_nm_eng":"Guro"}
+{"identifier":"NEXT","mainLine":true,"station_nm":"영등포","line_num":"1","fr_code":"139","station_cd":"1006","xpoint_wgs":37.515504,"ypoint_wgs":126.907628,"station_nm_han":"永登浦","station_nm_eng":"Yeongdeungpo"}
+{"identifier":"CURRENT","mainLine":true,"station_nm":"신도림","line_num":"2","fr_code":"234","station_cd":"0234","xpoint_wgs":37.508725,"ypoint_wgs":126.891295,"station_nm_han":"新道林","station_nm_eng":"Sindorim"}
+{"identifier":"PREVIOUS","mainLine":false,"station_nm":"도림천","line_num":"2","fr_code":"234-1","station_cd":"0247","xpoint_wgs":37.514287,"ypoint_wgs":126.882768,"station_nm_han":"道林川","station_nm_eng":"Dorimcheon"}
+{"identifier":"PREVIOUS","mainLine":true,"station_nm":"문래","line_num":"2","fr_code":"235","station_cd":"0235","xpoint_wgs":37.517933,"ypoint_wgs":126.89476,"station_nm_han":"文來","station_nm_eng":"Mullae"}
+{"identifier":"NEXT","mainLine":true,"station_nm":"대림","line_num":"2","fr_code":"233","station_cd":"0233","xpoint_wgs":37.49297,"ypoint_wgs":126.895801,"station_nm_han":"大林","station_nm_eng":"Daerim"}
 
-Station(stationName=구로, lineNum=1, identifier=PREVIOUS, isMainLine=true)
-Station(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=true)
+{"identifier":"CURRENT","mainLine":true,"station_nm":"신도림","line_num":"1","fr_code":"140","station_cd":"1007","xpoint_wgs":37.508725,"ypoint_wgs":126.891295,"station_nm_han":"新道林","station_nm_eng":"Sindorim"}
+{"identifier":"PREVIOUS","mainLine":true,"station_nm":"구로","line_num":"1","fr_code":"141","station_cd":"1701","xpoint_wgs":37.503039,"ypoint_wgs":126.881966,"station_nm_han":"九老","station_nm_eng":"Guro"}
+{"identifier":"NEXT","mainLine":true,"station_nm":"영등포","line_num":"1","fr_code":"139","station_cd":"1006","xpoint_wgs":37.515504,"ypoint_wgs":126.907628,"station_nm_han":"永登浦","station_nm_eng":"Yeongdeungpo"}
 ```
 
-- stationName : 역 이름
+- identifier : 이전역, 현재역, 다음역 구분 (PREVIOUS, CURRENT, NEXT)
+- mainLine : 이전/다음역이 여러개인 경우 주노선의 역인 지 구분 (boolean)
+- station_nm : 역 이름
 - lineNum : 노선 이름 (서울시 열린 데이터 광장의 [서울시 역코드로 지하철역 정보 검색](http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-112&srvType=A&serviceKind=1) API의 LINE_NUM 필드를 기준으로 작성됐습니다. (자기부상선, 서해선 제외))
   - 1 ~ 9 : 1 ~ 9호선
   - A : 공항철도
@@ -50,10 +55,14 @@ Station(stationName=영등포, lineNum=1, identifier=NEXT, isMainLine=true)
   - SU : 수인선
   - U : 의정부경전철
   - UI : 우이신설경전철
-  - J : 자기부상선
+  - M : 자기부상선
   - W : 서해선
-- identifier : 이전역, 현재역, 다음역 구분 (PREVIOUS, CURRENT, NEXT)
-- isMainLine : 이전/다음역이 여러개인 경우 주노선의 역인 지 구분 (boolean)
+- fr_code : 외부코드
+- station_cd : 역코드
+- xpoint_wgs : 위도(Latitude)
+- ypoint_wgs : 경도(Longitude)
+- station_nm_han : 역 이름(한자)
+- station_nm_eng : 역 이름(영문)
 
 현재는 서울만 구현되어있지만, 다른 도시 철도도 추가 예정입니다.
 
