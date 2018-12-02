@@ -1,6 +1,6 @@
 package io.github.devwillee.koreametrograph.api;
 
-import io.github.devwillee.koreametrograph.api.graph.UndirectedWeightedGraph;
+import io.github.devwillee.koreametrograph.api.graph.WeightedGraph;
 import io.github.devwillee.koreametrograph.api.graph.Vertex;
 import io.github.devwillee.koreametrograph.api.graph.WeightedEdge;
 
@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
-public abstract class AbstractUndirectedWeightedGraph<V extends Vertex, WE extends WeightedEdge, W> implements UndirectedWeightedGraph<V, WE, W> {
+public abstract class AbstractUndirectedWeightedGraph<V extends Vertex, WE extends WeightedEdge, W> implements WeightedGraph<V, WE, W> {
 
 	/**
 	 * 실질적인 Graph 구현체
@@ -64,8 +64,8 @@ public abstract class AbstractUndirectedWeightedGraph<V extends Vertex, WE exten
 		// A-B 관계는 존재하지만, B-A 관계는 없으므로
 		// 각 Vertex의 Edge들을 모두 검색해야 함.
 		for(LinkedList<WE> vertices : edgesByVertices.values()) {
-			for(WE WE : vertices) {
-				if(WE.contains(vertex))
+			for(WE edge : vertices) {
+				if(edge.contains(vertex))
 					return true;
 			}
 		}

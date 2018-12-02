@@ -62,6 +62,7 @@ public class Station implements Vertex<Station> {
 		Station station = new Station(this.stationName, this.lineNum);
 		station.setIdentifier(this.identifier);
 		station.setMainLine(this.mainLine);
+		station.setForeignCode(this.foreignCode);
 		station.setStationCode(this.stationCode);
 		station.setLatitude(this.latitude);
 		station.setLongitude(this.longitude);

@@ -88,11 +88,11 @@ public final class MetroGraph extends AbstractUndirectedWeightedGraph<Station, M
 
         edges.add(newEdge);
 
-        addVertexForUndirectedGraph(enrichedToVertex, enrichedFromVertex, weight);
+        addSymmetryEdge(enrichedToVertex, enrichedFromVertex, weight);
     }
 
     // 무방향 그래프 대칭 처리
-    private void addVertexForUndirectedGraph(Station toVertex, Station fromVertex, MetroWeight weight) {
+    private void addSymmetryEdge(Station toVertex, Station fromVertex, MetroWeight weight) {
         if (!edgesByVertices.containsKey(toVertex))
             edgesByVertices.put(toVertex, new LinkedList<>());
 
