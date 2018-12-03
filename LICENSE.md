@@ -57,3 +57,8 @@ specific rights regarding derivate works.
 You may obtain a copy of the License at:
 
 http://www.apache.org/licenses/LICENSE-2.0
+
+
+# Metro data
+## Seoul
+[서울교통공사](http://www.seoulmetro.co.kr) ([CC BY](https://creativecommons.org/licenses/by/4.0/))
