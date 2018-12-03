@@ -1,51 +1,20 @@
 package io.github.devwillee.koreametrograph.api;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
+import io.github.devwillee.koreametrograph.api.data.DataReader;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 public final class MetroGraph extends AbstractUndirectedWeightedGraph<Station, MetroEdge, MetroWeight> {
 
-    private final ObjectMapper mapper = new ObjectMapper();
-
     private List<Station> vertices;
-    @Getter
-    private final Map<String, List<MetroEdge>> edgesByLineNum;
 
     public MetroGraph(String verticesJsonPath, String edgesJsonPath) throws IOException {
         // Vertices 생성
-        JsonNode verticesRoot = mapper.readTree(new File(verticesJsonPath)).get("DATA");
-        vertices = mapper.convertValue(verticesRoot, new TypeReference<List<Station>>(){});
-
-        // Edges 생성
-        edgesByLineNum = new HashMap<>();
-        JsonNode edgesRoot = mapper.readTree(new File(edgesJsonPath));
-        edgesRoot.fields().forEachRemaining(edgeNodesByLineNum -> {
-            String lineNum = edgeNodesByLineNum.getKey();
-            JsonNode edgeNodes = edgeNodesByLineNum.getValue();
-
-            ArrayList<MetroEdge> edges = new ArrayList<>();
-
-            for(JsonNode edge : edgeNodes) {
-                Station from = new Station(edge.findValue("from").asText(), lineNum);
-                Station to = new Station(edge.findValue("to").asText(), lineNum);
-                int time = edge.findValue("time").asInt();
-                int distance = edge.findValue("distance").asInt();
-
-                MetroWeight weight = new MetroWeight(time, distance);
-
-                addVertex(from, to);
-                addEdge(from, to, weight);
-
-                edges.add(new MetroEdge(from, to, new MetroWeight(time, distance)));
-            }
-
-            edgesByLineNum.put(lineNum, edges);
+        vertices = DataReader.INSTANCE.parseVertices(verticesJsonPath);
+        DataReader.INSTANCE.parseEdgesByLineNum(edgesJsonPath, (from, to, weight) -> {
+            addVertex(from, to);
+            addEdge(from, to, weight);
         });
     }
 
@@ -70,7 +39,7 @@ public final class MetroGraph extends AbstractUndirectedWeightedGraph<Station, M
      * JSON 파일을 읽어 역정보, 경위도등의 부가정보를 채워 넣는다.
      * @param station
      */
-    private Station enrichWithJSON(Station station) {
+    private Station enrichVertex(Station station) {
         return vertices.stream()
                 .filter(x -> x.getStationName().equalsIgnoreCase(
                         station.getStationName()) &&
@@ -81,13 +50,11 @@ public final class MetroGraph extends AbstractUndirectedWeightedGraph<Station, M
     @Override
     public void addVertex(Station... vertices) {
         for(Station vertex : vertices) {
-            //enrichWithJSON(vertex);
-
             //이미 vertex가 존재하는가?
             if(edgesByVertices.containsKey(vertex))
                 continue;
 
-            edgesByVertices.put(enrichWithJSON(vertex), new LinkedList<>());
+            edgesByVertices.put(enrichVertex(vertex), new LinkedList<>());
         }
     }
 
@@ -130,30 +97,13 @@ public final class MetroGraph extends AbstractUndirectedWeightedGraph<Station, M
 
         }
 
-
-
-
-
-
-
-
-        Station enrichedFromVertex = enrichWithJSON(from);
-        Station enrichedToVertex = enrichWithJSON(to);
+        Station enrichedFromVertex = enrichVertex(from);
+        Station enrichedToVertex = enrichVertex(to);
 
         // fromVertex의 default Identifier는 "Current"이므로 fromVertex의 Identifier 설정하지 않음.
         enrichedToVertex.setIdentifier(Identifier.NEXT);
 
-        //LinkedList<MetroEdge> edges = edgesByVertices.get(enrichedFromVertex);
-
-        MetroEdge newEdge = new MetroEdge(enrichedFromVertex, enrichedToVertex, weight);
-
-        // 중복 추가 방지 (정점 하나에 이어진 정점이 2개 이상 포함될 수가 없으므로)
-        /*if(edges.contains(newEdge)) {
-            throw new IllegalArgumentException("This Edge is an already added.\n" + newEdge);
-        }*/
-
-        edges.add(newEdge);
-
+        edges.add(new MetroEdge(enrichedFromVertex, enrichedToVertex, weight));
         addSymmetryEdge(enrichedToVertex, enrichedFromVertex, weight);
     }
 
@@ -230,7 +180,7 @@ public final class MetroGraph extends AbstractUndirectedWeightedGraph<Station, M
         LinkedList<Station> stack = new LinkedList<>();
 
         //첫 번째 Node 방문
-        Station firstVertex = enrichWithJSON(vertex);
+        Station firstVertex = enrichVertex(vertex);
         stack.push(firstVertex);
         checkVisitSet.add(firstVertex);
 
@@ -276,7 +226,7 @@ public final class MetroGraph extends AbstractUndirectedWeightedGraph<Station, M
         Queue<Station> queue = new LinkedList<>();
 
         //첫 번째 Node 방문
-        Station firstVertex = enrichWithJSON(vertex);
+        Station firstVertex = enrichVertex(vertex);
         queue.offer(firstVertex);
         checkVisitSet.add(firstVertex);
 

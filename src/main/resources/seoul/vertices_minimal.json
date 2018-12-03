@@ -6329,8 +6329,8 @@
   }, {
     "station_nm" : "소새울",
     "line_num" : "W",
-    "fr_code" : "4805",
-    "station_cd" : "842",
+    "fr_code" : "842",
+    "station_cd" : "4805",
     "xpoint_wgs" : 37.468499,
     "ypoint_wgs" : 126.7961017,
     "station_nm_han" : "素砂屋",
@@ -6338,8 +6338,8 @@
   }, {
     "station_nm" : "시흥능곡",
     "line_num" : "W",
-    "fr_code" : "4810",
-    "station_cd" : "847",
+    "fr_code" : "847",
+    "station_cd" : "4810",
     "xpoint_wgs" : 37.370141,
     "ypoint_wgs" : 126.808706,
     "station_nm_han" : "始興陵谷",
@@ -6365,8 +6365,8 @@
   }, {
     "station_nm" : "신천",
     "line_num" : "W",
-    "fr_code" : "4807",
-    "station_cd" : "844",
+    "fr_code" : "844",
+    "station_cd" : "4807",
     "xpoint_wgs" : 37.439587,
     "ypoint_wgs" : 126.786768,
     "station_nm_han" : "新川",
